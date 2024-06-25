@@ -5,6 +5,8 @@ local classes = {}
 local JSONnull = print --// functions become null at the time of encoding, they can't be serialized.
 local actualClient;
 local socket, connected;
+local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+local websocket = Websocket or websocket
 
 --// Services
 local HTTPS = game:GetService("HttpService")
@@ -30,7 +32,7 @@ local function apiRequest(method, path, data)
             ["Authorization"] = "Bot " .. actualClient.token
         }
     }
-    local req = syn.request(struc)
+    local req = httprequest(struc)
     return HTTPS:JSONDecode(req.Body)
 end
 
@@ -105,7 +107,7 @@ rdiscord.Client = function(options)
 
     --// Methods
     function client:run(token)
-        socket = syn.websocket.connect("ws://localhost:8765")
+        socket = websocket.connect("ws://localhost:8765")
         self.token = token
 
         socket.OnMessage:Connect(function(message)
