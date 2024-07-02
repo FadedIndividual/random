@@ -491,6 +491,20 @@ end
 local sg = Instance.new("ScreenGui")
 sg.Parent = gethui()
 
+local Tickk,BOOOl=0,false
+Add:Keybind(Enum.KeyCode.P, function()
+	if BOOOl then
+		sg.Enabled = not sg.Enabled
+		return
+	end
+	BOOOl=true
+	spawn(function()
+		repeat task.wait() until tick()-Tickk>= .5
+		BOOOl = false
+	end)
+end, false)
+
+
 local Back = Add.Frame(sg, UDim2.new(0, 450, 0, 400), UDim2.new(.5, -175, .5, -150), {["BackgroundTr"] = 1; ["drag"] = true})
 local Actual = Add.Frame(Back, UDim2.new(1, 0, .865, 0), UDim2.new(0, 0, .135, 0), {["BackgroundTr"] = .05})
 local Crn = Add:Extra(Actual, {"Corner", {["Size"] = UDim.new(0, 6)}})
