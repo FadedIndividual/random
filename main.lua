@@ -1,4 +1,4 @@
-repeat task.wait() until game.Loaded and game:GetService("Players") and game.Players.LocalPlayer
+repeat task.wait() until game.Loaded and game:GetService("Players") and game.Players.LocalPlayer; wait(2.5)
 
 local Players = game:GetService("Players")
 local Local = Players.LocalPlayer
