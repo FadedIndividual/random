@@ -31,7 +31,7 @@ for i, v in pairs(Main_T.Settings) do
 			loadstring(game:HttpGet(v.Raw))()
 		else ButtonSS = Add.b_Button(b11, tostring(i), function(but) loadstring(game:HttpGet(v.Raw))() but:Destroy() end, false)
 		end
-		B52 = Add.b_Button(b11, tostring(i) .. ": " .. tostring(v["On-Teleport"]), function(button) v["On-Teleport"] = not v["On-Teleport"]; button.Text = tostring(i) .. ": " .. tostring(v["On-Teleport"]) Update() end, false)
+		B52 = Add.b_Button(b11, tostring(i) .. ": " .. tostring(v["On-Teleport"]), function(button) v["On-Teleport"] = not v["On-Teleport"]; button.Text = (tostring(i) .. ": " .. tostring(v["On-Teleport"])); Update() end, false)
 		spawn(function()
 			while ButtonSS and task.wait(.25) do
 				if v["On-Teleport"] then ButtonSS:Destroy() end
