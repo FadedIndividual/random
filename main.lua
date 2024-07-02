@@ -5,7 +5,7 @@ local Main_T = {}
 local function Update() writefile(NAME..".txt", game:GetService("HttpService"):JSONEncode(Main_T)) end
 
 if isfile(NAME..".txt") and game:GetService("HttpService"):JSONDecode(readfile(NAME..".txt")).Version == VERSION  then
-	Main_T = readfile(gam:GetService("HttpService"):JSONDecode(NAME..".txt"))
+	Main_T = readfile(game:GetService("HttpService"):JSONDecode(NAME..".txt"))
 else
 	Main_T = {
 		["Version"] = VERSION;
