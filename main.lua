@@ -2,7 +2,7 @@ repeat task.wait() until game.Loaded and game:GetService("Players") and game.Pla
 
 local Players = game:GetService("Players")
 local Local = Players.LocalPlayer
-local NAME, VERSION = "social_area", 5
+local NAME, VERSION = "social_area", 6
 local Main_T = {}
 local function Update() writefile(NAME..".txt", game:GetService("HttpService"):JSONEncode(Main_T)) end
 
@@ -32,7 +32,7 @@ local BSS1, BSS2 = nil, nil;
 for i, v in pairs(Main_T["Settings"]) do
 	if v["PID"] and table.find(v["PID"], tostring(game.PlaceId)) then
 		if string.lower(i):sub(1, 4) == "blox" then spawn(function()
-				local Frags = LocalPlayer.PlayerGui:WaitForChild("Main"):WaitForChild("Fragments")
+				local Frags = Local.PlayerGui:WaitForChild("Main"):WaitForChild("Fragments")
 				Frags.Position = UDim2.new(.15, 0, .698, 0)
 		end) end
 		spawn(function() BSS2 = Add.b_Button(b11, tostring(i), function(but) spawn(function() loadstring(game:HttpGet(tostring(v.Raw)))() end) but:Destroy() end, false) end)
