@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 local Local = Players.LocalPlayer
-local NAME, VERSION = "social_area", 0
+local NAME, VERSION = "social_area", 1
 local Main_T = {}
 local function Update() writefile(NAME..".txt", game:GetService("HttpService"):JSONEncode(Main_T)) end
 
@@ -10,7 +10,7 @@ else
 	Main_T = {
 		["Version"] = VERSION;
 		["Vars"] = {
-			["Client"] = {["FPS"] = 25};
+			["Client"] = {["FPS"] = 30};
 		};
 		["Settings"] = {
 			["Blox-Fruits"] = {["PID"] = 2753915549; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/REDzHUB/BloxFruits/main/redz9999"};
@@ -19,9 +19,7 @@ else
 		};
 	}--[[ 2753915549/Blox-Fruits - - 391104146/LPI - - 417267366/DH ]]
 	Update()
-end
-
-setfpscap(Main_T.Vars.Client.FPS)
+end setfpscap(tonumber(Main_T.Vars.Client.FPS))
 
 local Add = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndividual/random/main/lib.lua"))()
 
@@ -42,4 +40,4 @@ for i, v in pairs(Main_T.Settings) do
 	end
 end
 
-local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Update() setfpscap(tonumber(Tbox.Text)) Tbox.Text = "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]" end end, 4)
+local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Tbox.Text = "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]"; Update() setfpscap(tonumber(Tbox.Text)) end end, 4)
