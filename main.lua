@@ -28,7 +28,7 @@ local Add = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndi
 local b11, b55 = Add.Category_Button("Settings")
 local B52, ButtonSS = nil, nil;
 for i, v in pairs(Main_T.Settings) do
-	if v.PID == game.PlaceId then
+	if tonumber(v.PID) == tonumber(game.PlaceId) then
 		if v["On-Teleport"] then
 			loadstring(game:HttpGet(v.Raw))()
 		else ButtonSS = Add.b_Button(b11, tostring(i), function(but) loadstring(game:HttpGet(v.Raw))() but:Destroy() end, false)
@@ -42,4 +42,4 @@ for i, v in pairs(Main_T.Settings) do
 	end
 end
 
-local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Update() setfpscap(tonumber(Tbox.Text)) end end, 4)
+local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Update() setfpscap(tonumber(Tbox.Text)) Tbox.Text = "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]" end end, 4)
