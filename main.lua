@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 local Local = Players.LocalPlayer
-local NAME, VERSION = "social_area", 1
+local NAME, VERSION = "social_area", 2
 local Main_T = {}
 local function Update() writefile(NAME..".txt", game:GetService("HttpService"):JSONEncode(Main_T)) end
 
@@ -13,7 +13,7 @@ else
 			["Client"] = {["FPS"] = 30};
 		};
 		["Settings"] = {
-			["Blox-Fruits"] = {["PID"] = 2753915549; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/REDzHUB/BloxFruits/main/redz9999"};
+			["Blox-Fruits"] = {["PID"] = 2753915549; ["On-Teleport"] = true; ["Raw"] = "https://raw.githubusercontent.com/REDzHUB/BloxFruits/main/redz9999"};
 			--["LPI"] = {["On-Teleport"] = false; ["Raw"] = nil; ["Extra"] = {}};
 			["DH"] = {["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/MAIN-Serverhopping-Bot/main/Main.lua"};
 		};
