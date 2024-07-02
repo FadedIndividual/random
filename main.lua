@@ -25,7 +25,7 @@ local Add = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndi
 
 local b11, b55 = Add.Category_Button("Settings")
 local B52, ButtonSS = nil, nil;
-for i, v in pairs(Main_T.Settings) do
+for i, v in ipairs(Main_T.Settings) do
 	if tonumber(v.PID) == tonumber(game.PlaceId) then
 		if v["On-Teleport"] then
 			loadstring(game:HttpGet(v.Raw))()
