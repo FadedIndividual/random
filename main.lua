@@ -23,7 +23,8 @@ end
 
 local Add = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndividual/random/main/lib.lua"))()
 
-local b11, B52, ButtonSS = Add.Category_Button("Settings"), nil, nil;
+local b11, b55 = Add.Category_Button("Settings")
+local B52, ButtonSS = nil, nil;
 for i, v in pairs(Main_T.Settings) do
 	if v.PID == game.PlaceId then
 		if v["On-Teleport"] then
@@ -39,4 +40,4 @@ for i, v in pairs(Main_T.Settings) do
 	end
 end
 
-local FFPPSS = Add.t_TextBox(Sec, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Update() end end, 4)
+local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Update() end end, 4)
