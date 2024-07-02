@@ -590,11 +590,14 @@ Add.t_TextBox = function(Par, Text, funk, Type)
 		Tbox.Position = UDim2.new(0, 0, 0, 0)
 		Tbox.FocusLost:Connect(function()
 			if Tbox.Text == "" then return end
+			local SAVED = Tbox.Text
 			spawn(function()
-				funk(Tbox)
+				task.wait(.5)
+				if Tbox.Text == SAVED then
+					Tbox.Text = ""
+				end
 			end)
-			task.wait(.5)
-			Tbox.Text = ""
+			funk(Tbox)
 		end)
 	else
 		BB = (Type == 1) and Add.Text(Frame, UDim2.new(.75, 0, 1, 0), UDim2.new(0, 0, 0, 0), {["Text"] = Text; ["Horiz"] = Enum.TextXAlignment.Left; ["TextSca"] = true}) or (Type == 2) and Add.b_Button(Frame, Text, function() funk(Tbox) end, false) or Add.b_Button(Frame, Text, function(TBB, Boolll) funk(Tbox, Boolll) end, true)
