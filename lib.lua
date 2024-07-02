@@ -1,4 +1,5 @@
-local Add, Keybinds, uis = {}, {}, game:GetService("UserInputService")
+local Add, uis = {}, game:GetService("UserInputService")
+local Add.Keybinds = {}
 
 local Color_Table = {
 	["Background"] = Color3.fromRGB(50, 50, 50),
@@ -18,16 +19,16 @@ function String_Table(String, Table)
 end
 
 function Add:Remove_Binds()
-	Keybinds = {}
+	Add.Keybinds = {}
 end
 
 function Add:Keybind(Key, func, toggle)
 	local BOOL = false
-	table.insert(Keybinds, {["Key"] = Key, ["Funk"] = func, ["Toggle"] = toggle, ["Value"] = BOOL})
+	table.insert(Add.Keybinds, {["Key"] = Key, ["Funk"] = func, ["Toggle"] = toggle, ["Value"] = BOOL})
 end
 
 uis.InputBegan:Connect(function(Key, Typing)
-	for i, v in pairs(Keybinds) do
+	for i, v in pairs(Add.Keybinds) do
 		if v.Key == Key.KeyCode then
 			v.Value = not v.Value; v.Funk(v.Value)
 		end
@@ -35,7 +36,7 @@ uis.InputBegan:Connect(function(Key, Typing)
 end)
 
 uis.InputEnded:Connect(function(Key, Typing)
-	for i, v in pairs(Keybinds) do
+	for i, v in pairs(Add.Keybinds) do
 		if v.Key == Key.KeyCode then
 			v.Value = not v.Value; v.Funk(v.Value)
 		end
