@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local Local = Players.LocalPlayer
 local NAME, VERSION = "social_area", 0
 local Main_T = {}
-local function Update() writefile(Name..".txt", game:GetService("HttpService"):JSONEncode(Main_T)) end
+local function Update() writefile(NAME..".txt", game:GetService("HttpService"):JSONEncode(Main_T)) end
 
 if isfile(NAME..".txt") and readfile(gam:GetService("HttpService"):JSONDecode(NAME..".txt")).Version == VERSION  then
 	Main_T = readfile(gam:GetService("HttpService"):JSONDecode(NAME..".txt"))
