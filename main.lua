@@ -11,7 +11,7 @@ else
 		["Version"] = VERSION;
 		["Vars"] = {
 			["Client"] = {["FPS"] = 25};
-		}
+		};
 		["Settings"] = {
 			["Blox-Fruits"] = {["PID"] = 2753915549; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/REDzHUB/BloxFruits/main/redz9999"};
 			--["LPI"] = {["On-Teleport"] = false; ["Raw"] = nil; ["Extra"] = {}};
