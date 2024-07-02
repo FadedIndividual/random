@@ -1,3 +1,5 @@
+repeat task.wait() until game.Loaded and game:GetService("Players") and game.Players.LocalPlayer
+
 local Players = game:GetService("Players")
 local Local = Players.LocalPlayer
 local NAME, VERSION = "social_area", 2
