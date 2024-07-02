@@ -27,11 +27,13 @@ local b11, b55 = Add.Category_Button("Settings")
 local B52, ButtonSS = nil, nil;
 for i, v in ipairs(Main_T.Settings) do
 	if tonumber(v.PID) == tonumber(game.PlaceId) then
+		print("FOUND SAME PLACE ID")
 		if v["On-Teleport"] then
-			loadstring(game:HttpGet(v.Raw))()
-		else ButtonSS = Add.b_Button(b11, tostring(i), function(but) loadstring(game:HttpGet(v.Raw))() but:Destroy() end, false)
+			loadstring(game:HttpGet(tostring(v.Raw)))()
+			print("LOADED " .. tostring(i))
+		else ButtonSS = Add.b_Button(b11, tostring(i), function(but) loadstring(game:HttpGet(tostring(v.Raw)))() print("LOADED " .. tostring(i)) but:Destroy() end, false)
 		end
-		B52 = Add.b_Button(b11, tostring(i) .. ": " .. tostring(v["On-Teleport"]), function(button) v["On-Teleport"] = not v["On-Teleport"]; button.Text = (tostring(i) .. ": " .. tostring(v["On-Teleport"])); Update() end, false)
+		B52 = Add.b_Button(b11, (tostring(i) .. ": " .. tostring(v["On-Teleport"])), function(button) v["On-Teleport"] = not v["On-Teleport"]; button.Text = (tostring(i) .. ": " .. tostring(v["On-Teleport"])); Update() end, false)
 		spawn(function()
 			while ButtonSS and task.wait(.25) do
 				if v["On-Teleport"] then ButtonSS:Destroy() end
