@@ -18,7 +18,7 @@ function String_Table(String, Table)
 	return bool
 end
 
-function Add:Remove_Binds()
+Add.Remove_Binds = function()
 	Add.Keybinds = {}
 end
 
