@@ -28,14 +28,15 @@ local Add = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndi
 local b11, b55 = Add.Category_Button("Settings")
 local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Tbox.PlaceholderText = "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]"; Update() setfpscap(tonumber(Tbox.Text)) end end, 4)
 local INFY = Add.b_Button(b11, "Infinite Yield", function(but) spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end) but:Destroy() end, false)
+
 local BSS1, BSS2 = nil, nil;
 for i, v in pairs(Main_T["Settings"]) do
 	if v["PID"] and table.find(v["PID"], tostring(game.PlaceId)) then
-		if string.lower(i):sub(1, 4) == "blox" then spawn(function()
-				local Frags = Local.PlayerGui:WaitForChild("Main"):WaitForChild("Fragments")
-				Frags.Position = UDim2.new(.15, 0, .698, 0)
-		end) end
-		spawn(function() BSS2 = Add.b_Button(b11, tostring(i), function(but) spawn(function() loadstring(game:HttpGet(tostring(v.Raw)))() end) but:Destroy() end, false) end)
+		if v["On-Teleport"] then
+			loadstring(game:HttpGet(tostring(v.Raw)))()
+		else
+			spawn(function() BSS2 = Add.b_Button(b11, tostring(i), function(but) spawn(function() loadstring(game:HttpGet(tostring(v.Raw)))() end) but:Destroy() end, false) end)
+		end
 		spawn(function() BSS1 = Add.b_Button(b11, (tostring(i) .. ": " .. tostring(v["On-Teleport"])), function(button) v["On-Teleport"] = not v["On-Teleport"]; button.Text = (tostring(i) .. ": " .. tostring(v["On-Teleport"])); Update() end, false) end)
 	end
 end
