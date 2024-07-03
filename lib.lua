@@ -499,7 +499,7 @@ Add:Keybind(Enum.KeyCode.P, function()
 	end
 	BOOOl=true
 	spawn(function()
-		repeat task.wait() until tick()-Tickk>= .5
+		repeat task.wait() until tick()-Tickk>= 1.5
 		BOOOl = false
 	end)
 end, false)
