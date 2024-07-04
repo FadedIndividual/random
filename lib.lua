@@ -491,9 +491,9 @@ end
 local sg = Instance.new("ScreenGui")
 sg.Parent = gethui()
 
-Add:Keybind(Enum.KeyCode.P, function()
-	sg.Enabled = not sg.Enabled
-end, false)
+Add:Keybind(Enum.KeyCode.P, function(bool)
+	sg.Enabled = not bool
+end, true)
 
 
 local Back = Add.Frame(sg, UDim2.new(0, 450, 0, 400), UDim2.new(.5, -175, .5, -150), {["BackgroundTr"] = 1; ["drag"] = true})
