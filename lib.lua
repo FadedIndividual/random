@@ -491,17 +491,8 @@ end
 local sg = Instance.new("ScreenGui")
 sg.Parent = gethui()
 
-local Tickk,BOOOl=0,false
 Add:Keybind(Enum.KeyCode.P, function()
-	if BOOOl then
-		sg.Enabled = not sg.Enabled
-		return
-	end
-	BOOOl=true
-	spawn(function()
-		repeat task.wait() until tick()-Tickk>= 1.5
-		BOOOl = false
-	end)
+	sg.Enabled = not sg.Enabled
 end, false)
 
 
