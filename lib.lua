@@ -27,7 +27,7 @@ function Add:Keybind(Key, func, toggle)
 	table.insert(Keybinds, {["Key"] = Key, ["Funk"] = func, ["Toggle"] = toggle, ["Value"] = BOOL})
 end
 
-uis.InputBegan:Connect(function(Key, Typing)
+uis.InputBegan:Connect(function(Key, Typing) if Typing then return end
 	for i, v in pairs(Keybinds) do
 		if v.Key == Key.KeyCode then
 			v.Value = not v.Value; v.Funk(v.Value)
@@ -35,7 +35,7 @@ uis.InputBegan:Connect(function(Key, Typing)
 	end
 end)
 
-uis.InputEnded:Connect(function(Key, Typing)
+uis.InputEnded:Connect(function(Key, Typing) if Typing then return end
 	for i, v in pairs(Keybinds) do
 		if v.Key == Key.KeyCode and not v.Toggle then
 			v.Value = not v.Value; v.Funk(v.Value)
