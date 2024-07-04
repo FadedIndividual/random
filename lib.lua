@@ -37,7 +37,7 @@ end)
 
 uis.InputEnded:Connect(function(Key, Typing)
 	for i, v in pairs(Keybinds) do
-		if v.Key == Key.KeyCode then
+		if v.Key == Key.KeyCode and not v.Toggle then
 			v.Value = not v.Value; v.Funk(v.Value)
 		end
 	end
