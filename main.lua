@@ -1,3 +1,5 @@
+repeat task.wait() until game.Loaded; task.wait(2.5)
+
 Players = game:GetService("Players")
 LocalPlayer = Players.LocalPlayer
 Mouse = LocalPlayer:GetMouse()
