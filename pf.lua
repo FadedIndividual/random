@@ -4,7 +4,7 @@ Mouse = LocalPlayer:GetMouse()
 UIS = game:GetService("UserInputService")
 RunService = game:GetService("RunService")
 
-local num, CC, _Folders, _Cache, _Locked = 1, workspace.CurrentCamera, {}, {}, nil
+local num, CC, _Folders, _Cache, _Locked = 2, workspace.CurrentCamera, {}, {}, nil
 
 local function GetTeam(Part) 
     for i,Vest in pairs(Part:GetDescendants()) do
@@ -109,16 +109,7 @@ game:GetService("RunService").Stepped:Connect(function()
     end
     if _Locked and UIS:IsMouseButtonPressed(1) then
         local vec = PositionToScreen(_Locked.Position)
-        if vec.X > Mouse.X then
-            mousemoverel(num, 0)
-        elseif vec.X < Mouse.X then
-            mousemoverel(-num, 0)
-        end
-        if vec.Y > Mouse.Y then
-            mousemoverel(0, num)
-        elseif vec.Y < Mouse.Y then
-            mousemoverel(0, -num)
-        end
+        mousemoverel(vec.X-Mouse.X, vec.Y-Mouse.Y)
     end
     if _Cache and #_Cache >= 1 then
         for i, v in pairs(_Cache) do
