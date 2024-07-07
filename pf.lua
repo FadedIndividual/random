@@ -70,7 +70,7 @@ PositionToScreen = function(Vectorf)
 end
 GetClosestMouse = function(TBall)
     local Closest
-    local MaxDistance = 2e4
+    local MaxDistance = 40
     for _,Head in next, TBall do
 		local ScreenPosition, OnScreen = PositionToScreen(Head.Position)
 		local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
@@ -109,7 +109,7 @@ game:GetService("RunService").Stepped:Connect(function()
     end
     if _Locked and UIS:IsMouseButtonPressed(1) then
         local vec = PositionToScreen(_Locked.Position)
-        mousemoverel(vec.X-Mouse.X, vec.Y-Mouse.Y)
+        mousemoverel((vec.X-Mouse.X), (vec.Y-Mouse.Y))
     end
     if _Cache and #_Cache >= 1 then
         for i, v in pairs(_Cache) do
