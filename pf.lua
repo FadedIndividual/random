@@ -6,13 +6,15 @@ Mouse = LocalPlayer:GetMouse()
 UIS = game:GetService("UserInputService")
 RunService = game:GetService("RunService")
 
+local _FOV = 50
+
 local num, CC, _Folders, _Cache, _Locked = 2, workspace.CurrentCamera, {}, {}, nil
 local circle = Drawing.new("Circle")
-circle.Radius = 75
+circle.Radius = _FOV
 circle.Color = Color3.fromRGB(100, 0, 255)
 circle.Filled = false
 circle.NumSides = 300
-circle.Transparency = 0.8
+circle.Transparency = 0.4
 circle.Visible = true
 
 local function GetTeam(Part) 
@@ -79,7 +81,7 @@ PositionToScreen = function(Vectorf)
 end
 GetClosestMouse = function(TBall)
     local Closest
-    local MaxDistance = 75
+    local MaxDistance = _FOV
     for _,Head in next, TBall do
 		local ScreenPosition, OnScreen = PositionToScreen(Head.Position)
 		local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
@@ -95,12 +97,12 @@ GetClosestMouse = function(TBall)
     end
 end
 
-game:GetService("RunService").Stepped:Connect(function()
+while true do pcall(function()
     circle.Position = Vector2.new(Mouse.X, Mouse.Y+30)
     _Folders = GetChars()
     if _Folders then
 		pcall(function()
-            if _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) then
+            if not _Locked or _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) then
 			    _Locked = GetClosestMouse(_Heads())
             end
 		end)
@@ -150,4 +152,4 @@ game:GetService("RunService").Stepped:Connect(function()
             v.Color = Color3.fromHSV(tick()%1, 1, 1)
         end
     end
-end)
+end) task.wait() end
