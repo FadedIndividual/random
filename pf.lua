@@ -1,3 +1,5 @@
+repeat task.wait() until game.Loaded; task.wait(2.5)
+
 Players = game:GetService("Players")
 LocalPlayer = Players.LocalPlayer
 Mouse = LocalPlayer:GetMouse()
@@ -70,7 +72,7 @@ PositionToScreen = function(Vectorf)
 end
 GetClosestMouse = function(TBall)
     local Closest
-    local MaxDistance = 40
+    local MaxDistance = 50
     for _,Head in next, TBall do
 		local ScreenPosition, OnScreen = PositionToScreen(Head.Position)
 		local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
@@ -90,7 +92,9 @@ game:GetService("RunService").Stepped:Connect(function()
     _Folders = GetChars()
     if _Folders then
 		pcall(function()
-			_Locked = GetClosestMouse(_Heads())
+            if not UIS:IsMouseButtonPressed(0) then
+			    _Locked = GetClosestMouse(_Heads())
+            end
 		end)
         for i, v in pairs(_Folders) do
             if tostring(i) == tostring(LocalPlayer.Team) then
