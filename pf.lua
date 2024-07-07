@@ -102,7 +102,7 @@ while true do pcall(function()
     _Folders = GetChars()
     if _Folders then
 		pcall(function()
-            if not UIS:IsMouseButtonPressed(1) or not _Locked or _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) then
+            if not _Locked or _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) or not UIS:IsMouseButtonPressed(1) then
 			    _Locked = GetClosestMouse(_Heads())
             end
 		end)
