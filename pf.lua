@@ -92,7 +92,7 @@ game:GetService("RunService").Stepped:Connect(function()
     _Folders = GetChars()
     if _Folders then
 		pcall(function()
-            if not UIS:IsMouseButtonPressed(0) then
+            if _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) then
 			    _Locked = GetClosestMouse(_Heads())
             end
 		end)
@@ -112,7 +112,7 @@ game:GetService("RunService").Stepped:Connect(function()
         end
     end
     if _Locked and UIS:IsMouseButtonPressed(1) then
-        local vec = PositionToScreen(_Locked.Position)
+        local vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and _Locked.Position + Vector3.new(0, -.75, 0) or _Locked.Position))
         mousemoverel(((vec.X-Mouse.X)/2), ((vec.Y-Mouse.Y)/2))
     end
     if _Cache and #_Cache >= 1 then
