@@ -12,7 +12,7 @@ circle.Radius = 75
 circle.Color = Color3.fromRGB(100, 0, 255)
 circle.Filled = false
 circle.NumSides = 300
-circle.Transparency = 0.4
+circle.Transparency = 0.8
 circle.Visible = true
 
 local function GetTeam(Part) 
