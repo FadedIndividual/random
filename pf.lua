@@ -7,6 +7,13 @@ UIS = game:GetService("UserInputService")
 RunService = game:GetService("RunService")
 
 local num, CC, _Folders, _Cache, _Locked = 2, workspace.CurrentCamera, {}, {}, nil
+local circle = Drawing.new("Circle")
+circle.Radius = 75
+circle.Color = Color3.fromRGB(100, 0, 255)
+circle.Filled = false
+circle.NumSides = 300
+circle.Transparency = 0.4
+circle.Visible = true
 
 local function GetTeam(Part) 
     for i,Vest in pairs(Part:GetDescendants()) do
@@ -89,6 +96,7 @@ GetClosestMouse = function(TBall)
 end
 
 game:GetService("RunService").Stepped:Connect(function()
+    circle.Position = Vector2.new(Mouse.X, Mouse.Y)
     _Folders = GetChars()
     if _Folders then
 		pcall(function()
