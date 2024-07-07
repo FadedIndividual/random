@@ -96,7 +96,7 @@ GetClosestMouse = function(TBall)
 end
 
 game:GetService("RunService").Stepped:Connect(function()
-    circle.Position = Vector2.new(Mouse.X, Mouse.Y-30)
+    circle.Position = Vector2.new(Mouse.X, Mouse.Y+30)
     _Folders = GetChars()
     if _Folders then
 		pcall(function()
