@@ -121,7 +121,7 @@ game:GetService("RunService").Stepped:Connect(function()
             if _Dist >= 100 then
                 vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and (_Locked.Position + Vector3.new(0, .45*_Dist/100, 0)) or (_Locked.Position + Vector3.new(0, (.35*_Dist/100), 0))))
             else
-                vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and (_Locked.Position + Vector3.new(0, -.7, 0)) or (_Locked.Position + Vector3.new(0, -.35, 0))))
+                vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and (_Locked.Position + Vector3.new(0, -(.1*(_Dist/100)), 0)) or (_Locked.Position + Vector3.new(0, -.12, 0))))
             end
             mousemoverel(((vec.X-Mouse.X)/1.25), ((vec.Y-Mouse.Y)/1.25))
         end)
