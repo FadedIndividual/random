@@ -115,14 +115,16 @@ game:GetService("RunService").Stepped:Connect(function()
     --game:GetService("Players").LocalPlayer.PlayerGui.MenuScreenGui.Pages.PageLoadoutMenu.DisplayWeaponSelection.DisplayWeaponList.Container
     --game:GetService("Players").LocalPlayer.PlayerGui.MenuScreenGui.Pages.PageLoadoutMenu.DisplayWeaponSelection.DisplayWeaponList
     if _Locked and UIS:IsMouseButtonPressed(1) then
-        local vec, _fp = nil, CC:FindFirstChild("Part")
-        local _Dist = (_fp.Position - _Locked.Position).Magnitude
-        if _Dist >= 100 then
-            vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and (_Locked.Position + Vector3.new(0, .45*_Dist/100, 0)) or (_Locked.Position + Vector3.new(0, (.35*_Dist/100), 0))))
-        else
-            vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and (_Locked.Position + Vector3.new(0, -.7, 0)) or (_Locked.Position + Vector3.new(0, -.35, 0)))
-        end
-        mousemoverel(((vec.X-Mouse.X)/1.25), ((vec.Y-Mouse.Y)/1.25))
+        pcall(function()
+            local vec, _fp = nil, CC:FindFirstChildOfClass("Part")
+            local _Dist = (_fp.Position - _Locked.Position).Magnitude
+            if _Dist >= 100 then
+                vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and (_Locked.Position + Vector3.new(0, .45*_Dist/100, 0)) or (_Locked.Position + Vector3.new(0, (.35*_Dist/100), 0))))
+            else
+                vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and (_Locked.Position + Vector3.new(0, -.7, 0)) or (_Locked.Position + Vector3.new(0, -.35, 0))))
+            end
+            mousemoverel(((vec.X-Mouse.X)/1.25), ((vec.Y-Mouse.Y)/1.25))
+        end)
     end
     if _Cache and #_Cache >= 1 then
         for i, v in pairs(_Cache) do
