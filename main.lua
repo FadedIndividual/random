@@ -90,7 +90,7 @@ game:GetService("RunService").Stepped:Connect(function()
     _Folders = GetChars()
     if _Folders then
 		pcall(function()
-            if not UIS:IsMouseButtonPressed(0)) then
+            if not UIS:IsMouseButtonPressed(0) then
 			    _Locked = GetClosestMouse(_Heads())
             end
 		end)
