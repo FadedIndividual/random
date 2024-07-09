@@ -87,7 +87,7 @@ local function isPartVisible(part)
     local raycastParams = RaycastParams.new()
 
     raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-    raycastParams.FilterDescendantsInstances = {CC}
+    raycastParams.FilterDescendantsInstances = {CC, tostring(LocalPlayer.Team) == "Phantoms" and _Folders["Ghosts"] or _Folders["Phantoms"]}
 
     local result = workspace:Raycast(orangee, direct * _dista, raycastParams)
     if result and result.Instance and result.Instance ~= part then
