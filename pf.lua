@@ -79,16 +79,36 @@ PositionToScreen = function(Vectorf)
     local Vector, OnScreen = workspace.CurrentCamera:WorldToScreenPoint(Vectorf)
     return Vector, OnScreen
 end
+
+local function isPartVisible(part)
+    local orangee = CC.CFrame.Position
+    local direct = (part.Position - orangee).unit
+    local _dista = (part.Position - orangee).magnitude
+    local raycastParams = RaycastParams.new()
+
+    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+    raycastParams.FilterDescendantsInstances = {CC}
+
+    local result = workspace:Raycast(orangee, direct * _dista, raycastParams)
+    if result and result.Instance and result.Instance ~= part then
+        return false
+    end
+    return true
+end
+
+
 GetClosestMouse = function(TBall)
     local Closest
     local MaxDistance = _FOV
     for _,Head in next, TBall do
-		local ScreenPosition, OnScreen = PositionToScreen(Head.Position)
-		local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
-		if OnScreen and Distance <= MaxDistance then
-			Closest = Head
-			MaxDistance = Distance
-		end
+        if isPartVisible(Head) then
+            local ScreenPosition, OnScreen = PositionToScreen(Head.Position)
+            local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
+            if OnScreen and Distance <= MaxDistance then
+                Closest = Head
+                MaxDistance = Distance
+            end
+        end
     end
     if Closest then
         return Closest
