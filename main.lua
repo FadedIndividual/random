@@ -23,7 +23,7 @@ else
 		};
 	}--[[ 2753915549/Blox-Fruits - - 292439477/PF - - 391104146/LPI - - 417267366/DH ]]
 	Update()
-end setfpscap(tonumber(Main_T.Vars.Client.FPS))
+end
 
 local Add = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndividual/random/main/lib.lua"))()
 
@@ -31,10 +31,9 @@ local b11, b55 = Add.Category_Button("Settings")
 local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Tbox.PlaceholderText = "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]"; Update() setfpscap(tonumber(Tbox.Text)) end end, 4)
 local INFY = Add.b_Button(b11, "Infinite Yield", function(but) spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end) but:Destroy() end, false)
 spawn(function()
-	while task.wait() do
-        if IY_LOADED or _G.IY_DEBUG then
-            INFY:Destroy()
-        end
+    while task.wait(.3) do
+        if IY_LOADED or _G.IY_DEBUG then if INFY then INFY:Destroy() end end
+        setfpscap(tonumber(Main_T.Vars.Client.FPS))
     end
 end)
 
