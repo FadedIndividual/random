@@ -1,0 +1,23 @@
+repeat task.wait() until game.Loaded; wait(1)
+
+if tostring(game.PlaceId) ~= "5315046213" then return end
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local Characters = workspace:WaitForChild("Characters")
+
+while true do
+    for i, v in pairs(Characters:GetChildren()) do
+        if v ~= LocalPlayer.Character then
+            v:Destroy()
+        end
+    end
+
+    for i, v in pairs(workspace:GetChildren()) do
+        if table.find({"[A-Only]", "[Autohop]", "[Backwards]", "[Faste]", "[Half-Sideways]", "[Scroll]", "[Sideways]", "[W-Only]"}, tostring(v):split(" ")[1]) then
+            v:Destroy()
+        end
+    end
+    task.wait(15)
+end
