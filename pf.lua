@@ -118,7 +118,7 @@ GetClosestMouse = function(TBall)
 end
 
 while true do pcall(function()
-    circle.Position = Vector2.new(Mouse.X, Mouse.Y+30)
+    circle.Position = Vector2.new(Mouse.X, Mouse.Y+60)
     _Folders = GetChars()
     if _Folders then
 		pcall(function()
