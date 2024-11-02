@@ -19,7 +19,7 @@ else
 			--["LPI"] = {["On-Teleport"] = false; ["Raw"] = nil; ["Extra"] = {}};
 			["DH"] = {["PID"] = {"417267366"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/MAIN-Serverhopping-Bot/main/Main.lua"};
 			["PF"] = {["PID"] = {"292439477"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/random/main/pf.lua"};
-			["BHOP"] = {["PID"] = {"5315046213"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/random/main/bhop"};
+			["BHOP"] = {["PID"] = {"5315046213", "5315066937"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/random/main/bhop"};
 		};
 	}--[[ 2753915549/Blox-Fruits - - 292439477/PF - - 391104146/LPI - - 417267366/DH ]]
 	Update()
