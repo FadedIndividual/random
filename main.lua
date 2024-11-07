@@ -2,7 +2,7 @@ repeat task.wait() until game.Loaded and game:GetService("Players") and game:Get
 
 local Players = game:GetService("Players")
 local Local = Players.LocalPlayer
-local NAME, VERSION = "social_area", 8
+local NAME, VERSION = "social_area", 9
 local Main_T = {}
 local function Update() writefile(NAME..".txt", game:GetService("HttpService"):JSONEncode(Main_T)) end
 
