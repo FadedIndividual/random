@@ -64,7 +64,7 @@ function _Heads()
             if tostring(iii) ~= tostring(LocalPlayer.Team) then
                 for ii, vv in pairs(zz) do
 					for _, v in pairs(vv:GetDescendants()) do
-						if v:IsA("BasePart") and #v:GetChildren() == 2 and v:FindFirstChildOfClass("Decal") and v:FindFirstChildOfClass("SpecialMesh") and v:FindFirstChildOfClass("SpecialMesh").MeshId == "rbxassetid://6179256256" then
+						if v:IsA("BasePart") and v:FindFirstChildOfClass("SpecialMesh") and v:FindFirstChildOfClass("SpecialMesh").MeshId == "rbxassetid://6179256256" then
 							table.insert(TBLL, v)
 						end
 					end
