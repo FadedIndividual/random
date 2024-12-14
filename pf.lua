@@ -16,6 +16,7 @@ circle.Filled = false
 circle.NumSides = 300
 circle.Transparency = 0.4
 circle.Visible = true
+circle.Thickness = 1
 
 local function GetTeam(Part) 
     for i,Vest in pairs(Part:GetDescendants()) do
