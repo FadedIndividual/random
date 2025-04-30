@@ -491,7 +491,7 @@ end
 local sg = Instance.new("ScreenGui")
 sg.Parent = gethui()
 
-Add:Keybind(Enum.KeyCode.Insert, function(bool)
+Add:Keybind(Enum.KeyCode.F3, function(bool)
 	sg.Enabled = not bool
 end, true)
 
