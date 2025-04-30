@@ -122,25 +122,25 @@ while true do pcall(function()
     circle.Position = Vector2.new(Mouse.X, Mouse.Y+60)
     _Folders = GetChars()
     if _Folders then
-		pcall(function()
-            if not _Locked or _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) or not UIS:IsMouseButtonPressed(1) then
-			    _Locked = GetClosestMouse(_Heads())
-            end
-		end)
         for i, v in pairs(_Folders) do
             if tostring(i) == tostring(LocalPlayer.Team) then
             else
                 if #v >= 1 then
                     for _,z in pairs(v) do
-                        if not z:FindFirstChild("x_x") then
+                        if not z:FindFirstChild("xx_xx") then
                             local High = Instance.new("Highlight")
-                            High.Parent = z; High.Name = "x_x"; High.Adornee = z; High.OutlineColor = Color3.fromRGB(255, 0, 0) High.OutlineTransparency = .25; High.FillTransparency = 1; High.Enabled = true; High.LineThickness = 3; High.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                            High.Parent = z; High.Name = "xx_xx"; High.Adornee = z; High.OutlineColor = Color3.fromRGB(255, 0, 0) High.OutlineTransparency = .25; High.FillTransparency = 1; High.Enabled = true; High.LineThickness = 3; High.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
                             table.insert(_Cache, High)
                         end
                     end
                 end
             end
         end
+        pcall(function()
+            if not _Locked or _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) or not UIS:IsMouseButtonPressed(1) then
+			    _Locked = GetClosestMouse(_Heads())
+            end
+		end)
     end
 
     --game:GetService("Players").LocalPlayer.PlayerGui.MenuScreenGui.Pages.PageLoadoutMenu.DisplayWeaponSelection.DisplayWeaponList.Container
