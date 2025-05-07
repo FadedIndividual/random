@@ -232,6 +232,48 @@ LocalPlayer.Chatted:Connect(function(msg)
 				end
 			end
 		end
+    elseif sCmd({";spawn"}, args[1], true) then
+        if args[2] and tonumber(args[2]) then
+            if SELECTED then
+                local num = string.gsub(SELECTED.Name, "button", "", 1)
+                num = tonumber(num)
+                settings().Network.IncomingReplicationLag = math.huge
+                task.wait(1)
+                for i = 1, tonumber(args[2]) do
+                    game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
+                end
+                task.wait(1)
+                settings().Network.IncomingReplicationLag = 0
+            else
+                settings().Network.IncomingReplicationLag = math.huge
+                task.wait(1)
+                for i = 1, tonumber(args[2]) do
+                    game:GetService("ReplicatedStorage").Item:FireServer(1, "0:0:0:0")
+                end
+                task.wait(1)
+                settings().Network.IncomingReplicationLag = 0
+            end
+        else
+            if SELECTED then
+                local num = string.gsub(SELECTED.Name, "button", "", 1)
+                num = tonumber(num)
+                settings().Network.IncomingReplicationLag = math.huge
+                task.wait(1)
+                for i = 1, amt do
+                    game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
+                end
+                task.wait(1)
+                settings().Network.IncomingReplicationLag = 0
+            else
+                settings().Network.IncomingReplicationLag = math.huge
+                task.wait(1)
+                for i = 1, tonumber(args[2]) do
+                    game:GetService("ReplicatedStorage").Item:FireServer(1, "0:0:0:0")
+                end
+                task.wait(1)
+                settings().Network.IncomingReplicationLag = 0
+            end
+        end
     elseif sCmd({";amount", ";amt"}, args[1], true) then
         if tonumber(args[2]) then
             amt = tonumber(args[2])
