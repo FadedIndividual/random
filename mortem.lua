@@ -354,7 +354,7 @@ LocalPlayer.Chatted:Connect(function(msg)
             amt = tonumber(args[2])
             amt2Dupe.PlaceholderText = "Amount-2-Dupe: " .. tostring(amt)
         end
-    elseif sCmd({";change", {";bool"}}, args[1], true) then
+    elseif sCmd({";change", ";bool"}, args[1], true) then
         if sCmd({"true", "+", "pos"}, args[2], true) then
             BOOL = true
         elseif sCmd({"false", "-", "neg"}, args[2], true) then
