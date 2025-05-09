@@ -89,11 +89,10 @@ local function AddSD(f)
 			num = tonumber(num)
 			if SELECTED == f then
 				settings().Network.IncomingReplicationLag = math.huge
-				task.wait(1)
+				task.wait(2)
 				for i = 1, amt do
 					game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
 				end
-				task.wait(1)
 				settings().Network.IncomingReplicationLag = 0
 			else
 				game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
@@ -321,7 +320,6 @@ LocalPlayer.Chatted:Connect(function(msg)
                     for i = 1, tonumber(args[2]) do
                         game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
                     end
-                    task.wait(1)
                     settings().Network.IncomingReplicationLag = 0
                 else
                     settings().Network.IncomingReplicationLag = math.huge
@@ -329,7 +327,6 @@ LocalPlayer.Chatted:Connect(function(msg)
                     for i = 1, tonumber(args[2]) do
                         game:GetService("ReplicatedStorage").Item:FireServer(1, "0:0:0:0")
                     end
-                    task.wait(1)
                     settings().Network.IncomingReplicationLag = 0
                 end
             else
@@ -341,7 +338,6 @@ LocalPlayer.Chatted:Connect(function(msg)
                     for i = 1, amt do
                         game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
                     end
-                    task.wait(1)
                     settings().Network.IncomingReplicationLag = 0
                 else
                     settings().Network.IncomingReplicationLag = math.huge
@@ -349,7 +345,6 @@ LocalPlayer.Chatted:Connect(function(msg)
                     for i = 1, tonumber(args[2]) do
                         game:GetService("ReplicatedStorage").Item:FireServer(1, "0:0:0:0")
                     end
-                    task.wait(1)
                     settings().Network.IncomingReplicationLag = 0
                 end
             end
