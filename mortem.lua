@@ -8,6 +8,7 @@ local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 local Camera = workspace.CurrentCamera
 local Lighting = game:GetService("Lighting")
+local Core = game:GetService("CoreGui")
 
 Lighting.GlobalShadows = false
 Lighting.Brightness = .8
@@ -59,7 +60,7 @@ local function sTween(Objs, Size, Position, Time)
 	end
 end
 
-local amt = 50
+local amt, amt2Dupe = 50, nil
 
 local function AddSD(f)
 	if f then
@@ -112,6 +113,83 @@ end
 AddSD(EXIT)
 for i,v in pairs(getButtons()) do
 	AddSD(v)
+end
+
+local sg = Instance.new("ScreenGui")
+sg.Parent = Core
+sg.IgnoreGuiInset = true
+sg.Name = "XIXI"
+
+local Main = Add.Frame(sg, UDim2.new(0, 300, 0, 350), UDim2.new(0, 0, 1, -350), {["BackgroundTran"] = .5})
+local uil = Instance.new("UIListLayout", Main) uil.HorizontalAlignment = Enum.HorizontalAlignment.Center uil.SortOrder = Enum.SortOrder.LayoutOrder
+
+local nUm = 0
+local function Button(Parent, Text, Function, Type) nUm += 1
+    local bMain = Add.Button(Parent, UDim2.new(1, 0, 0, 27), UDim2.new(0, 0, 0, 0), "", {["BackgroundColor"] = Color3.new(0, 0, 0), ["BackgroundTran"] = .75, ["TextSize"] = 20, ["LayoutOrder"] = nUm})
+    if Type == 1 then
+        local line = Add.Text(bMain, UDim2.new(1, 0, 0, 1), UDim2.new(0, 0, 1, -1), "", {["BackgroundColor"] = Color3.new(1,1,1)})
+        bMain.Text = Text
+        bMain["TextXAlignment"] = Enum.TextXAlignment.Center
+        bMain.MouseButton1Click:Connect(function()
+            Function(bMain)
+        end)
+    elseif Type == 2 then
+        local mFrame = Add.Frame(Parent, UDim2.new(1, 0, 0, 27), UDim2.new(0, 0, 0, 0), {["BackgroundTran"] = 1, ["LayoutOrder"] = nUm})
+        local mLabe = Add.Text(mFrame, UDim2.new(.8, 0, 1, 0), UDim2.new(0, 0, 0, 0), "", {["BackgroundTran"] = .75, ["BackgroundColor"] = Color3.new(0, 0, 0), ["TextSize"] = 20})
+        local line = Add.Text(mLabe, UDim2.new(1, 0, 0, 1), UDim2.new(0, 0, 1, -1), "", {["BackgroundColor"] = Color3.new(1,1,1)})
+        bMain.Parent = mFrame
+        bMain.Size = UDim2.new(.2, 0, 1, 0)
+        bMain.Position = UDim2.new(.8, 0, 0, 0)
+        if type(Text) ~= "string" then
+            mLabe.Text = Text[1]
+            bMain.Text = Text[2]
+        else
+            mLabe.Text = Text
+            bMain.Text = "..."
+        end
+        bMain.BackgroundTransparency = .5
+        bMain.MouseButton1Click:Connect(function()
+            Function(bMain, mLabe)
+        end)
+    end
+
+    return bMain
+end
+
+local function Box(Parent, Text, Function, Type) nUm += 1
+    local mBox = Add.Box(Parent, UDim2.new(1, 0, 0, 27), UDim2.new(0, 0, 0, 0), "", {["BackgroundColor"] = Color3.new(0, 0, 0), ["BackgroundTran"] = .75, ["TextSize"] = 20, ["LayoutOrder"] = nUm})
+    if Type == 1 then
+        local line = Add.Text(mBox, UDim2.new(1, 0, 0, 1), UDim2.new(0, 0, 1, -1), "", {["BackgroundColor"] = Color3.new(1,1,1)})
+        mBox.PlaceholderText = Text
+        mBox.FocusLost:Connect(function()
+            Function(mBox)
+        end)
+    elseif Type == 2 then
+        local mFrame = Add.Frame(Parent, UDim2.new(1, 0, 0, 27), UDim2.new(0, 0, 0, 0), {["BackgroundTran"] = 1, ["LayoutOrder"] = nUm})
+        mBox.Parent = mFrame
+        mBox.Size = UDim2.new(.2, 0, 1, 0)
+        mBox.Position = UDim2.new(.8, 0, 0, 0)
+        mBox.BackgroundTransparency = .5
+        mBox.PlaceholderText = "..."
+        local mBut = Button(mFrame, Text, function()
+            Function(mBox, button)
+        end, 1)
+        mBut.Size = UDim2.new(.8, 0, 1, 0)
+    elseif Type == 3 then
+        local mFrame = Add.Frame(Parent, UDim2.new(1, 0, 0, 27), UDim2.new(0, 0, 0, 0), {["BackgroundTran"] = 1, ["LayoutOrder"] = nUm})
+        local mLabe = Add.Text(mFrame, UDim2.new(.8, 0, 1, 0), UDim2.new(0, 0, 0, 0), Text, {["BackgroundTran"] = .75, ["BackgroundColor"] = Color3.new(0, 0, 0), ["TextSize"] = 20})
+        local line = Add.Text(mLabe, UDim2.new(1, 0, 0, 1), UDim2.new(0, 0, 1, -1), "", {["BackgroundColor"] = Color3.new(1,1,1)})
+        mBox.Parent = mFrame
+        mBox.Size = UDim2.new(.2, 0, 1, 0)
+        mBox.Position = UDim2.new(.8, 0, 0, 0)
+        mBox.BackgroundTransparency = .5
+        mBox.PlaceholderText = "..."
+        mBox.FocusLost:Connect(function()
+            Function(mBox, mLabe)
+        end)
+    end
+
+    return mBox
 end
 
 -- T: minigun
@@ -233,50 +311,53 @@ LocalPlayer.Chatted:Connect(function(msg)
 			end
 		end
     elseif sCmd({";spawn"}, args[1], true) then
-        if args[2] and tonumber(args[2]) then
-            if SELECTED then
-                local num = string.gsub(SELECTED.Name, "button", "", 1)
-                num = tonumber(num)
-                settings().Network.IncomingReplicationLag = math.huge
-                task.wait(1)
-                for i = 1, tonumber(args[2]) do
-                    game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
+        if LocalPlayer.PlayerGui.SelectScreen.Enabled then
+            if args[2] and tonumber(args[2]) then
+                if SELECTED then
+                    local num = string.gsub(SELECTED.Name, "button", "", 1)
+                    num = tonumber(num)
+                    settings().Network.IncomingReplicationLag = math.huge
+                    task.wait(1)
+                    for i = 1, tonumber(args[2]) do
+                        game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
+                    end
+                    task.wait(1)
+                    settings().Network.IncomingReplicationLag = 0
+                else
+                    settings().Network.IncomingReplicationLag = math.huge
+                    task.wait(1)
+                    for i = 1, tonumber(args[2]) do
+                        game:GetService("ReplicatedStorage").Item:FireServer(1, "0:0:0:0")
+                    end
+                    task.wait(1)
+                    settings().Network.IncomingReplicationLag = 0
                 end
-                task.wait(1)
-                settings().Network.IncomingReplicationLag = 0
             else
-                settings().Network.IncomingReplicationLag = math.huge
-                task.wait(1)
-                for i = 1, tonumber(args[2]) do
-                    game:GetService("ReplicatedStorage").Item:FireServer(1, "0:0:0:0")
+                if SELECTED then
+                    local num = string.gsub(SELECTED.Name, "button", "", 1)
+                    num = tonumber(num)
+                    settings().Network.IncomingReplicationLag = math.huge
+                    task.wait(1)
+                    for i = 1, amt do
+                        game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
+                    end
+                    task.wait(1)
+                    settings().Network.IncomingReplicationLag = 0
+                else
+                    settings().Network.IncomingReplicationLag = math.huge
+                    task.wait(1)
+                    for i = 1, tonumber(args[2]) do
+                        game:GetService("ReplicatedStorage").Item:FireServer(1, "0:0:0:0")
+                    end
+                    task.wait(1)
+                    settings().Network.IncomingReplicationLag = 0
                 end
-                task.wait(1)
-                settings().Network.IncomingReplicationLag = 0
-            end
-        else
-            if SELECTED then
-                local num = string.gsub(SELECTED.Name, "button", "", 1)
-                num = tonumber(num)
-                settings().Network.IncomingReplicationLag = math.huge
-                task.wait(1)
-                for i = 1, amt do
-                    game:GetService("ReplicatedStorage").Item:FireServer(num, "0:0:0:0")
-                end
-                task.wait(1)
-                settings().Network.IncomingReplicationLag = 0
-            else
-                settings().Network.IncomingReplicationLag = math.huge
-                task.wait(1)
-                for i = 1, tonumber(args[2]) do
-                    game:GetService("ReplicatedStorage").Item:FireServer(1, "0:0:0:0")
-                end
-                task.wait(1)
-                settings().Network.IncomingReplicationLag = 0
             end
         end
     elseif sCmd({";amount", ";amt"}, args[1], true) then
         if tonumber(args[2]) then
             amt = tonumber(args[2])
+            amt2Dupe.PlaceholderText = "Amount-2-Dupe: " .. tostring(amt)
         end
     elseif sCmd({";change", {";bool"}}, args[1], true) then
         if sCmd({"true", "+", "pos"}, args[2], true) then
@@ -285,7 +366,110 @@ LocalPlayer.Chatted:Connect(function(msg)
             BOOL = false
         end
 	end
-	
+end)
+
+local ToolName, acMethod, am2eq, bind = nil, 1, 5, Enum.KeyCode.R
+
+amt2Dupe = Box(Main, "Amount-2-Dupe: 50", function(box)
+    if box.Text ~= "" or box.Text ~= nil or box.Text ~= " " and tonumber(box.Text) then
+        amt = tonumber(box.Text)
+        box.PlaceholderText = "Amount-2-Dupe: " .. tostring(amt)
+        box.Text = ""
+    else
+        amt = 50
+        box.PlaceholderText = "Amount-2-Dupe: 50"
+        box.Text = ""
+    end
+end, 1)
+
+local Tool2Equip = Box(Main, "Tool-2-Equip: ...", function(box)
+    if box.Text ~= "" or box.Text ~= nil or box.Text ~= " " then
+        if not LocalPlayer.PlayerGui.SelectScreen.Enabled then
+            for i,v in pairs(LocalPlayer.Backpack:GetChildren()) do
+                if v:IsA("Tool") and string.lower(string.sub(v.Name, 1, #box.Text)) == string.lower(box.Text) then
+                    box.Text = v.Name
+                    ToolName = v.Name
+                    break
+                end
+            end
+
+            box.PlaceholderText = "Tool-2-Equip: " .. box.Text
+            box.Text = ""
+        else
+            box.PlaceholderText = "Tool-2-Equip: ..."
+            box.Text = "PLEASE SPAWN IN"
+            task.spawn(function()
+                task.wait(1.5)
+                if LocalPlayer.PlayerGui.SelectScreen.Enabled then
+                    box.Text = ""
+                end
+            end)
+        end
+    else
+        ToolName = nil
+        box.PlaceholderText = "Tool-2-Equip: ..."
+        box.Text = ""
+    end
+end, 1)
+
+local ActivateMethod = Button(Main, "Use Method: Activate", function(button)
+    if button.Text == "Use Method: Activate" then
+        button.Text = "Use Method: Click"
+        acMethod = 2
+    else
+        button.Text = "Use Method: Activate"
+        acMethod = 1
+    end
+end, 1)
+
+local Amount2Equip = Box(Main, "Equip Amount:", function(box, text)
+    local nm = tonumber(box.Text)
+    if nm then
+        box.PlaceholderText = tostring(nm)
+        box.Text = ""
+        am2eq = nm
+    else
+        box.PlaceholderText = "5"
+        box.Text = ""
+        am2eq = 5
+    end
+end, 3)
+
+local bt2 = Button(Main, {"Bind Equip:", "R"}, function(button, text)
+    button.Text = "..."
+    wait(.5)
+    local keyBind = nil
+    keyBind = UIS.InputBegan:Connect(function(Key, Proc)
+        if Proc then return end
+
+        bind = Key.KeyCode
+        button.Text = string.gsub(tostring(Key.KeyCode), "Enum.KeyCode.", "")--Enum.KeyCode.
+
+        pcall(function()
+            keyBind:Disconnect()
+            keyBind = nil
+        end)
+    end)
+end, 2)
+
+local bbb = UIS.InputBegan:Connect(function(Key, Proc)
+    if Proc then return end
+    if Key.KeyCode == bind and ToolName ~= "" then
+        local num = 0
+        LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):UnequipTools()
+        for i,v in pairs(LocalPlayer.Backpack:GetChildren()) do
+            if v.Name == ToolName then
+                num = num+1 if (num + 1) >= am2eq then break end
+
+                v.Parent = LocalPlayer.Character
+                if acMethod == 1 then
+                    v:Activate()
+                else
+                    mouse1click(Mouse.X, Mouse.Y)
+                end
+            end
+        end
+    end
 end)
 
 task.spawn(function()
