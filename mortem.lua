@@ -363,7 +363,7 @@ LocalPlayer.Chatted:Connect(function(msg)
 	end
 end)
 
-local ToolName, acMethod, am2eq, bind, ijump = nil, 1, 5, Enum.KeyCode.R, false
+local ToolName, acMethod, am2eq, bind, ijump, iroll, istC = nil, 1, 5, Enum.KeyCode.R, false, false, nil
 
 amt2Dupe = Box(Main, "Amount-2-Dupe: 50", function(box)
     if box.Text ~= "" or box.Text ~= nil or box.Text ~= " " and tonumber(box.Text) then
@@ -456,6 +456,32 @@ local infJmp = Button(Main, "Inf-Jump: false", function(button)
         ijump = false
     end
 end, 1)
+
+local infRool = Button(Main, "Inf-Roll: false", function(button)
+    if button.Text == "Inf-Roll: false" then
+        button.Text = "Inf-Roll: true"
+        iroll = true
+        istC = RunService.Stepped:Connect(function()
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("IST") then
+                local ist = LocalPlayer.Character:FindFirstChild("IST")
+                local cd1 = ist:FindFirstChild("cooldown")
+                local cd2 = ist:FindFirstChild("cooldown2")
+                if ist and cd1 and cd2 the
+                    cd1.Value = false
+                    cd2.Value = false
+                end
+            end
+        end)
+    else
+        button.Text = "Inf-Roll: false"
+        iroll = false
+        pcall(function()
+            istC:Disconnect()
+            istC = nil
+        end)
+    end
+end, 1)							
+							
 local bbbb = UIS.JumpRequest:Connect(function()
     if ijump then
         if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
