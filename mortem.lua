@@ -466,7 +466,7 @@ local infRool = Button(Main, "Inf-Roll: false", function(button)
                 local ist = LocalPlayer.Character:FindFirstChild("IST")
                 local cd1 = ist:FindFirstChild("cooldown")
                 local cd2 = ist:FindFirstChild("cooldown2")
-                if ist and cd1 and cd2 the
+                if ist and cd1 and cd2 then
                     cd1.Value = false
                     cd2.Value = false
                 end
