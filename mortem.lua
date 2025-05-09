@@ -363,7 +363,7 @@ LocalPlayer.Chatted:Connect(function(msg)
 	end
 end)
 
-local ToolName, acMethod, am2eq, bind = nil, 1, 5, Enum.KeyCode.R
+local ToolName, acMethod, am2eq, bind, ijump = nil, 1, 5, Enum.KeyCode.R, false
 
 amt2Dupe = Box(Main, "Amount-2-Dupe: 50", function(box)
     if box.Text ~= "" or box.Text ~= nil or box.Text ~= " " and tonumber(box.Text) then
@@ -446,6 +446,23 @@ local bt2 = Button(Main, {"Bind Equip:", "R"}, function(button, text)
         end)
     end)
 end, 2)
+
+local infJmp = Button(Main, "Inf-Jump: false", function(button)
+    if button.Text == "Inf-Jump: false" then
+        button.Text = "Inf-Jump: true"
+        ijump = true
+    else
+        button.Text = "Inf-Jump: false"
+        ijump = false
+    end
+end, 1)
+local bbbb = UIS.JumpRequest:Connect(function()
+    if ijump then
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end)
 
 local bbb = UIS.InputBegan:Connect(function(Key, Proc)
     if Proc then return end
