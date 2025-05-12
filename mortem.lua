@@ -570,10 +570,10 @@ local bbb = UIS.InputBegan:Connect(function(Key, Proc)
             if closest then
                 task.spawn(function()
                     repeat task.wait()
+                        pcall(function()
                             if clock then
                                 Camera.CFrame = CFrame.new(Camera.CFrame.Position, closest.Character:FindFirstChild("HumanoidRootPart").Position + Vector3.new(0, 1.5, 0))
                             end
-                        pcall(function()
                             m.CFrame = closest.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.Angles(0, math.rad(0), 0) * CFrame.new(0, 0, 1)
                         end)
                     until not closest or not closest.Character or not closest.Character:FindFirstChildOfClass("Humanoid") or closest.Character:FindFirstChildOfClass("Humanoid").Health < 1.5 or (tick() - TT)>= 1.5
