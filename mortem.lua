@@ -363,7 +363,7 @@ LocalPlayer.Chatted:Connect(function(msg)
 	end
 end)
 
-local ToolName, acMethod, am2eq, bind, ijump, iroll, istC = nil, 1, 5, Enum.KeyCode.R, false, false, nil
+local ToolName, acMethod, am2eq, bind, bind2, ijump, iroll, closest, dist, clock = nil, 1, 5, Enum.KeyCode.R, Enum.KeyCode.C, false, false, nil, 27, false
 
 amt2Dupe = Box(Main, "Amount-2-Dupe: 50", function(box)
     if box.Text ~= "" or box.Text ~= nil or box.Text ~= " " and tonumber(box.Text) then
@@ -447,6 +447,64 @@ local bt2 = Button(Main, {"Bind Equip:", "R"}, function(button, text)
     end)
 end, 2)
 
+local clok = Button(Main, "Camlock-On-TP: OFF", function(button)
+    if button.Text == "Camlock-On-TP: OFF" then
+        button.Text = "Camlock-On-TP: ON"
+        clock = true
+    else
+        button.Text = "Camlock-On-TP: OFF"
+        clock = false
+    end
+end, 1)
+
+local gbClos = Button(Main, {"Tp-Near:", "C"}, function(button, text)
+    button.Text = "..."
+    wait(.5)
+    local keyBind = nil
+    keyBind = UIS.InputBegan:Connect(function(Key, Proc)
+        if Proc then return end
+
+        bind2 = Key.KeyCode
+        button.Text = string.gsub(tostring(Key.KeyCode), "Enum.KeyCode.", "")--Enum.KeyCode.
+
+        pcall(function()
+            keyBind:Disconnect()
+            keyBind = nil
+        end)
+    end)
+end, 2)
+
+amtdist = Box(Main, "TP-Distance: 27", function(box)
+    if box.Text ~= "" and box.Text ~= nil and tonumber(box.Text) and tonumber(box.Text) >= 1 and tonumber(box.Text) <= 27 then
+        dist = tonumber(box.Text)
+        box.PlaceholderText = "TP-Distance: " .. tostring(dist)
+        box.Text = ""
+    else
+        box.Text = "Has to be 1-27"
+        box.PlaceholderText = "TP-Distance: 27"
+        dist = 30
+        task.wait(1)
+        box.Text = ""
+    end
+end, 1)
+
+local gbClos = Button(Main, {"Break-Velocity:", "V"}, function(button, text)
+    button.Text = "..."
+    wait(.5)
+    local keyBind = nil
+    keyBind = UIS.InputBegan:Connect(function(Key, Proc)
+        if Proc then return end
+
+        bind3 = Key.KeyCode
+        button.Text = string.gsub(tostring(Key.KeyCode), "Enum.KeyCode.", "")--Enum.KeyCode.
+
+        pcall(function()
+            keyBind:Disconnect()
+            keyBind = nil
+        end)
+    end)
+end, 2)
+
 local infJmp = Button(Main, "Inf-Jump: false", function(button)
     if button.Text == "Inf-Jump: false" then
         button.Text = "Inf-Jump: true"
@@ -461,27 +519,12 @@ local infRool = Button(Main, "Inf-Roll: false", function(button)
     if button.Text == "Inf-Roll: false" then
         button.Text = "Inf-Roll: true"
         iroll = true
-        istC = RunService.Stepped:Connect(function()
-            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("IST") then
-                local ist = LocalPlayer.Character:FindFirstChild("IST")
-                local cd1 = ist:FindFirstChild("cooldown")
-                local cd2 = ist:FindFirstChild("cooldown2")
-                if ist and cd1 and cd2 then
-                    cd1.Value = false
-                    cd2.Value = false
-                end
-            end
-        end)
     else
         button.Text = "Inf-Roll: false"
         iroll = false
-        pcall(function()
-            istC:Disconnect()
-            istC = nil
-        end)
     end
-end, 1)							
-							
+end, 1)
+
 local bbbb = UIS.JumpRequest:Connect(function()
     if ijump then
         if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
@@ -505,6 +548,90 @@ local bbb = UIS.InputBegan:Connect(function(Key, Proc)
                 else
                     mouse1click(Mouse.X, Mouse.Y)
                 end
+            end
+        end
+    elseif Key.KeyCode == bind2 then
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            closest, closestdist = nil, dist
+            local TT = tick()
+            local m = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            for i,v in pairs(Players:GetPlayers()) do
+                if v~=LocalPlayer then
+                    if v.Character and v.Character:FindFirstChildOfClass("Humanoid") and v.Character:FindFirstChild("HumanoidRootPart") and v.Character.Humanoid.Health > 1.5 then
+                        local t = v.Character:FindFirstChild("HumanoidRootPart")
+
+                        if (m.Position - t.Position).Magnitude <= closestdist then
+                            closest = v
+                            closestdist = (m.Position - t.Position).Magnitude
+                        end
+                    end
+                end
+            end
+            if closest then
+                task.spawn(function()
+                    repeat task.wait()
+                            if clock then
+                                Camera.CFrame = CFrame.new(Camera.CFrame.Position, closest.Character:FindFirstChild("HumanoidRootPart").Position + Vector3.new(0, 1.5, 0))
+                            end
+                        pcall(function()
+                            m.CFrame = closest.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.Angles(0, math.rad(0), 0) * CFrame.new(0, 0, 1)
+                        end)
+                    until not closest or not closest.Character or not closest.Character:FindFirstChildOfClass("Humanoid") or closest.Character:FindFirstChildOfClass("Humanoid").Health < 1.5 or (tick() - TT)>= 1.5
+                    closest = nil
+                end)
+            end
+        end
+    elseif Key.KeyCode == bind3 then
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.GettingUp)
+            for i,v in pairs(LocalPlayer.Character:GetChildren()) do
+                if v:IsA("BasePart") then
+                    v.Velocity = Vector3.zero
+                end
+            end
+            LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.GettingUp)
+        end
+    end
+end)
+
+local db = false
+local function onChar()
+    local Humanoid = LocalPlayer.Character:WaitForChild("Humanoid", 5)
+    local hrp = LocalPlayer.Character:WaitForChild("HumanoidRootPart", 5)
+    local ist = LocalPlayer.Character:WaitForChild("IST")
+
+    if ist then
+        local cd1 = ist:FindFirstChild("cooldown")
+        local cd2 = ist:FindFirstChild("cooldown2")
+        if cd1 and cd2 then
+            cd1.Changed:Connect(function()
+                if iroll and cd1.Value == true and not db then
+                    db = true
+                    task.wait(.8)
+                    cd1.Value = false
+                    db = false
+                else return
+                end
+            end)
+            cd2.Changed:Connect(function()
+                if cd2.Value == true then
+                    cd2.Value = false
+                end
+            end)
+        end
+    end
+end
+
+task.spawn(function()
+    onChar()
+end)
+LocalPlayer.CharacterAdded:Connect(onChar)
+
+RunService.Stepped:Connect(function()
+    if closest and closest ~= nil and closest.Character and closest.Character:FindFirstChild("HumanoidRootPart") and closest.Character.HumanoidRootPart.Anchored then
+        for i,v in pairs(closest.Character:GetChildren()) do
+            if v:IsA("BasePart") then
+                v.CanCollide = false
             end
         end
     end
