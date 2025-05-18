@@ -2,7 +2,7 @@ repeat task.wait() until game.Loaded and game:GetService("Players") and game:Get
 
 local Players = game:GetService("Players")
 local Local = Players.LocalPlayer
-local NAME, VERSION = "social_area", 1
+local NAME, VERSION = "social_area", 2
 local Main_T = {}
 local function Update() writefile(NAME..".txt", game:GetService("HttpService"):JSONEncode(Main_T)) end
 
@@ -17,7 +17,7 @@ else
 		["Settings"] = {
 			["Blox-Fruits"] = {["PID"] = {"7449423635", "4442272183", "2753915549"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/REDzHUB/BloxFruits/main/redz9999"};
 			--["LPI"] = {["On-Teleport"] = false; ["Raw"] = nil; ["Extra"] = {}};
-			["DH"] = {["PID"] = {"417267366"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/MAIN-Serverhopping-Bot/main/Main.lua"};
+			--["DH"] = {["PID"] = {"417267366"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/MAIN-Serverhopping-Bot/main/Main.lua"};
 			["PF"] = {["PID"] = {"292439477"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/random/refs/heads/main/pf.lua"};
 			["BHOP"] = {["PID"] = {"5315046213", "5315066937"}; ["On-Teleport"] = false; ["Raw"] = "https://raw.githubusercontent.com/FadedIndividual/random/refs/heads/main/bhop"};
 		};
@@ -28,12 +28,15 @@ end
 local Add = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndividual/random/main/lib.lua"))()
 
 local b11, b55 = Add.Category_Button("Settings")
-local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Tbox.PlaceholderText = "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]"; Update() setfpscap(tonumber(Tbox.Text)) end end, 4)
+--local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Tbox.PlaceholderText = "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]"; Update() setfpscap(tonumber(Tbox.Text)) end end, 4)
 local INFY = Add.b_Button(b11, "Infinite Yield", function(but) spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end) but:Destroy() end, false)
+local UNIS = Add.b_Button(b11, "Infinite Yield", function(but) spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndividual/random/refs/heads/main/uni-silent"))() end) but:Destroy() end, false)
 spawn(function()
     while task.wait(.3) do
         if IY_LOADED or _G.IY_DEBUG then if INFY then INFY:Destroy() end end
-        setfpscap(tonumber(Main_T.Vars.Client.FPS))
+        if gethui():FindFirstChild("Uni-Silent") then if UNIS then UNIS:Destroy() end end
+        --setfpscap(tonumber(Main_T.Vars.Client.FPS))
+        if not INFY and not UNIS then break end
     end
 end)
 
