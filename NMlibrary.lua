@@ -16,6 +16,7 @@ ProtectGui(ScreenGui);
 
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
 ScreenGui.Parent = CoreGui;
+ScreenGui.Name = "Uni-Silent"
 
 local Toggles = {};
 local Options = {};
