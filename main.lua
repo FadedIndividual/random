@@ -30,7 +30,7 @@ local Add = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndi
 local b11, b55 = Add.Category_Button("Settings")
 --local FFPPSS = Add.t_TextBox(b11, "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]", function(Tbox) if tonumber(Tbox.Text) and (tonumber(Tbox.Text)>= 10 and tonumber(Tbox.Text) <= 999) then Main_T.Vars.Client.FPS = tonumber(Tbox.Text) Tbox.PlaceholderText = "FPS Cap ["..tostring(Main_T.Vars.Client.FPS).."]"; Update() setfpscap(tonumber(Tbox.Text)) end end, 4)
 local INFY = Add.b_Button(b11, "Infinite Yield", function(but) spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end) but:Destroy() end, false)
-local UNIS = Add.b_Button(b11, "Infinite Yield", function(but) spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndividual/random/refs/heads/main/uni-silent"))() end) but:Destroy() end, false)
+local UNIS = Add.b_Button(b11, "Universal Silent-Aim", function(but) spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndividual/random/refs/heads/main/uni-silent"))() end) but:Destroy() end, false)
 spawn(function()
     while task.wait(.3) do
         if IY_LOADED or _G.IY_DEBUG then if INFY then INFY:Destroy() end end
