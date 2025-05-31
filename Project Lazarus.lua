@@ -1,6 +1,5 @@
 --[[
 Workspace.Interact.UMP45.WallWeaponScript
-Workspace.Interact.Speed Cola.PerkScript
 ]]
 
 repeat task.wait() until game:IsLoaded()
@@ -174,14 +173,29 @@ local function Box(Parent, Text, Function, Type) nUm += 1
     end
 end
 
+local function getChars()
+	local Table = {}
+	
+	for i,v in pairs(Players:GetPlayers()) do
+		if v.Character then
+			table.insert(Table, v)
+		end
+	end
+	
+	return Table
+end
+
 local function isPartVisible(part)
     local orangee = LocalPlayer.Character:FindFirstChild("Head").Position
     local direct = (part.Position - orangee).unit
     local _dista = (part.Position - orangee).magnitude
     local raycastParams = RaycastParams.new()
 
+	local Chars = getChars()
+	table.insert(Chars, Camera)
+	
     raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-    raycastParams.FilterDescendantsInstances = {Camera, LocalPlayer.Character}
+    raycastParams.FilterDescendantsInstances = Chars
 
     local result = workspace:Raycast(orangee, direct * _dista, raycastParams)
     if result and result.Instance then
@@ -223,6 +237,7 @@ end
 
 local too = Create_Category("Weapon")
 local map = Create_Category("Map")
+local gmo0 = Create_Category("Gun Mods")
 local loc = Create_Category("Local")
 
 local isRecording = false
@@ -339,7 +354,6 @@ local function Perks()
 	
 	for i,v in pairs(workspace:FindFirstChild("Interact"):GetChildren()) do
 		if v:FindFirstChild("PerkScript") then
-			print(v:FindFirstChildOfClass("RemoteEvent").Name)
 			table.insert(Table, v)
 		end
 	end
@@ -494,6 +508,131 @@ local bt2 = Button(loc, {"Close Menu:", "LeftAlt"}, function(button, text)
     end)
 end, 2)
 
+nUm += 1
+local gmoFrame = Add.Frame(gmo0, UDim2.new(1, 0, 0, TopYSize-3), UDim2.new(0, 0, 0, 0), {["BackgroundTran"] = 0, ["LayoutOrder"] = nUm})
+Add:Extra(gmoFrame, {"uill", {["HorizonAlign"] = Enum.HorizontalAlignment.Center, ["FillDir"] = Enum.FillDirection.Horizontal}})
+local GunMods_Array = {
+	["Weapon1"] = {["Enabled"] = false},
+	["Weapon2"] = {["Enabled"] = false},
+	["Weapon3"] = {["Enabled"] = false}
+}
+local GunMods = {
+	["Infinite-Ammo"] = false,
+	["Instant-Kill"] = false,
+	["No-Recoil"] = false,
+	["No-Spread"] = false,
+	["FireRate"] = 0.1,
+	["Bullet-Pen"] = 2,
+	["Instant-Aim"] = false
+}
+
+for i,v in pairs(GunMods_Array) do
+	local wpbut = Button(gmoFrame, tostring(i), function(button)
+		v.Enabled = not v.Enabled
+		if v.Enabled then
+			button.BackgroundColor3 = Color3.new(0, 1, 0)
+		else
+			button.BackgroundColor3 = Color3.new(0, 0, 0)
+		end
+	end, 1)
+	wpbut.TextScaled = true
+	wpbut.Size = UDim2.new(1/3, 0, 1, 0)
+end
+
+local iaBut = Button(gmo0, "Infinite-Ammo: false", function(button)
+    GunMods["Infinite-Ammo"] = not GunMods["Infinite-Ammo"]
+    button.Text = "Infinite-Ammo: " .. tostring(GunMods["Infinite-Ammo"])
+end, 1)
+
+local nreBut = Button(gmo0, "No-Recoil: false", function(button)
+    GunMods["No-Recoil"] = not GunMods["No-Recoil"]
+    button.Text = "No-Recoil: " .. tostring(GunMods["No-Recoil"])
+end, 1)
+
+local nospBut = Button(gmo0, "No-Spread: false", function(button)
+    GunMods["No-Spread"] = not GunMods["No-Spread"]
+    button.Text = "No-Spread: " .. tostring(GunMods["No-Spread"])
+end, 1)
+
+local iaBut = Button(gmo0, "Instant-Aim: false", function(button)
+    GunMods["Instant-Aim"] = not GunMods["Instant-Aim"]
+    button.Text = "Instant-Aim: " .. tostring(GunMods["Instant-Aim"])
+end, 1)
+
+local iaBut = Button(gmo0, "Instant-Kill: false", function(button)
+    GunMods["Instant-Kill"] = not GunMods["Instant-Kill"]
+    button.Text = "Instant-Kill: " .. tostring(GunMods["Instant-Kill"])
+end, 1)
+
+local bx = Box(gmo0, "FireRate: .01", function(box)
+	local nuuum = tonumber(box.Text)
+	if nuuum and nuuum>= .0000001 then
+		GunMods.FireRate = nuuum
+	else
+		GunMods.FireRate = .01
+	end
+	box.PlaceholderText = "FireRate: " .. tostring(GunMods.FireRate)
+    box.Text = ""
+end, 1)
+
+local bx = Box(gmo0, "Bullet-Pen: 2", function(box)
+	local nuuum = tonumber(box.Text)
+	if nuuum and nuuum>= 1 then
+		GunMods["Bullet-Pen"] = nuuum
+	else
+		GunMods["Bullet-Pen"] = 2
+	end
+	box.PlaceholderText = "Bullet-Pen: " .. tostring(GunMods["Bullet-Pen"])
+    box.Text = ""
+end, 1)
+
+task.spawn(function()
+	while task.wait(.5) do
+		for i,v in pairs(LocalPlayer.Backpack:GetChildren()) do
+			local n2bModded = false
+			for a,z in pairs(GunMods_Array) do
+				if a == v.Name and z.Enabled then
+					n2bModded = true
+				end
+			end
+			if n2bModded then
+				local a = require(v)
+				
+				if GunMods["Instant-Kill"] then
+					if a.Splash then
+						a.Splash.Damage.Min = 1e5
+						a.Splash.Damage.Max = 9e9
+					else
+						a.Damage.Min = 1e5
+						a.Damage.Max = 9e9
+					end
+				end
+				if GunMods["Infinite-Ammo"] then
+					a.MaxAmmo = 9e9
+					a.StoredAmmo = 9e9
+					a.Ammo = 9e9
+				end
+				if GunMods["No-Recoil"] then
+					a.ViewKick.Yaw.Min = 0
+					a.ViewKick.Yaw.Max = 0
+					a.ViewKick.Pitch.Min = 0
+					a.ViewKick.Pitch.Max = 0
+					a.GunKick = 0
+				end
+				if GunMods["No-Spread"] then
+					a.Spread.Min = 0
+					a.Spread.Max = 0
+				end
+				if GunMods["Instant-Aim"] then
+					a.AimTime = .01
+				end
+				a.FireTime = GunMods.FireRate
+				a.BulletPenetration = GunMods["Bullet-Pen"]
+			end
+		end
+	end
+end)
+
 UIS.InputBegan:Connect(function(Key, Proc)
     if Proc or isRecording then return end
 
@@ -566,7 +705,7 @@ RunService.Stepped:Connect(function()
     local ss = GetClosestMouse(tbll)
     if ss then
         HitPart = ss:FindFirstChild(hbAim)
-		if bbbb and Main.Visible == false and iswindowactive() and ashoot and HitPart and HitPart.Parent and HitPart.Parent:FindFirstChildOfClass("Humanoid") and HitPart.Parent.Humanoid.Health >= .1 and tonumber(LocalPlayer.PlayerGui.HUD.Ammo.Mag.Text) > 0 then
+		if bbbb and Main.Visible == false and not UIS:GetFocusedTextBox() and iswindowactive() and ashoot and HitPart and HitPart.Parent and HitPart.Parent:FindFirstChildOfClass("Humanoid") and HitPart.Parent.Humanoid.Health >= .1 and tonumber(LocalPlayer.PlayerGui.HUD.Ammo.Mag.Text) > 0 then
 			if isPartVisible(HitPart) then
 				mouse1click()
 			end
@@ -618,6 +757,8 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
                 return oldNamecall(unpack(Arguments))
             end
         end
+    elseif not checkcaller() and Method == "FireServer" and tostring(self) == "SendData" then
+        return nil
     end
     return oldNamecall(...)
 end))
