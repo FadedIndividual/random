@@ -195,6 +195,7 @@ local function isPartVisible(part)
 	table.insert(Chars, Camera)
 	
     raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+	raycastParams.RespectCanCollide = false
     raycastParams.FilterDescendantsInstances = Chars
 
     local result = workspace:Raycast(orangee, direct * _dista, raycastParams)
@@ -291,7 +292,7 @@ task.spawn(function()
 					end
 				end
 			end
-			if Barricade then
+			if Barricade and abarrier then
 				Barricade:FindFirstChild("Activate"):FireServer()
 			end
 		end)
@@ -665,6 +666,20 @@ task.spawn(function()
             end
         end)
     end
+end)
+
+task.spawn(function()
+	while task.wait(1) do
+		for ii,zz in pairs(workspace.Interact:GetChildren()) do
+			if zz.Name == "Barricade" then
+				for i,v in pairs(zz:GetDescendants()) do
+					if v:IsA("BasePart") then
+						v.CanQuery = false
+					end
+				end
+			end
+		end
+	end
 end)
 
 local HitPart, highBox = nil, Instance.new("Highlight"); highBox.Adornee = nil; highBox.Parent = workspace; highBox.Enabled = false; highBox.Name = "showBox"; highBox.OutlineColor = Color3.new(0, 1, 0) highBox.OutlineTransparency = 0; highBox.FillTransparency = 1; highBox.LineThickness = 3; highBox.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
