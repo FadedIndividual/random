@@ -299,6 +299,45 @@ task.spawn(function()
 	end
 end)
 
+local tpZomms = false
+local boxwiaaa1 = Button(map, "TP-All Zombies: false", function(button)
+    tpZomms = not tpZomms
+    button.Text = "TP-All Zombies: " .. tostring(tpZomms)
+end, 1)
+
+local function gHRPS(instance)
+    local Table = {}
+    for _, desc in ipairs(instance:GetChildren()) do
+        if desc:FindFirstChild("HumanoidRootPart") then
+            table.insert(Table, desc:FindFirstChild("HumanoidRootPart"))
+        end
+    end
+    return Table
+end
+
+task.spawn(function()
+    while task.wait(.3) do
+        pcall(function()
+            local tb = gHRPS(workspace.Baddies)
+
+            if #tb >= 1 then
+                local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                
+                if hrp then
+                    for i,v in pairs(tb) do
+                        if tpZomms then
+                            v.Anchored = true
+                            v.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(0), 0) * CFrame.new(0, 0, -5)
+                        else
+                            v.Anchored = false
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
 local showBox = false
 local boxwia = Button(map, "Show MysteryBox: false", function(button)
     showBox = not showBox
