@@ -186,29 +186,36 @@ local function getChars()
 end
 
 local function isPartVisible(part)
-    local orangee = LocalPlayer.Character:FindFirstChild("Head").Position
-    local direct = (part.Position - orangee).unit
-    local _dista = (part.Position - orangee).magnitude
+    local orangee = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Head")
+	if not orangee then return false end
+	local origin = orangee.Position
+    local direction = (part.Position - origin).Unit * (part.Position - origin).Magnitude
+
     local raycastParams = RaycastParams.new()
+    raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+    raycastParams.RespectCanCollide = false
 
-	local Chars = getChars()
-	table.insert(Chars, Camera)
-	
-    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-	raycastParams.RespectCanCollide = false
-    raycastParams.FilterDescendantsInstances = Chars
+	local ignoreList = {}
+	for _, v in pairs(Players:GetPlayers()) do
+		if v.Character then
+			table.insert(ignoreList, v.Character)
+		end
+	end
+	table.insert(ignoreList, Camera)
 
-    local result = workspace:Raycast(orangee, direct * _dista, raycastParams)
+    raycastParams.FilterDescendantsInstances = ignoreList
+
+    local result = workspace:Raycast(origin, direction, raycastParams)
     if result and result.Instance then
         if result.Instance ~= part and not result.Instance:IsDescendantOf(part.Parent) then
             return false
         end
     else
-        print("CANNOT DETECT ANYTHING")
         return false
     end
     return true
 end
+
 
 PositionToScreen = function(Vectorf)
     local Vector, OnScreen = Camera:WorldToScreenPoint(Vectorf)
@@ -316,22 +323,27 @@ local function gHRPS(instance)
 end
 
 task.spawn(function()
-    while task.wait(.3) do
+	local isAnchored = false
+    while task.wait(.15) do
         pcall(function()
             local tb = gHRPS(workspace.Baddies)
 
             if #tb >= 1 then
                 local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                 
-                if hrp then
+                if (hrp and tpZomms) or isAnchored == true then
                     for i,v in pairs(tb) do
-                        if tpZomms then
-                            v.Anchored = true
-                            v.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(0), 0) * CFrame.new(0, 0, -5)
-                        else
-                            v.Anchored = false
-                        end
+						if tpZomms then
+							isAnchored = true
+							v.Anchored = true
+							v.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(0), 0) * CFrame.new(0, 0, -5)
+						else
+							v.Anchored = false
+						end
                     end
+					if isAnchored and tpZomms == false then
+						isAnchored = false
+					end
                 end
             end
         end)
@@ -476,7 +488,9 @@ end, 3)
 
 local function onChar()
 	local hum = LocalPlayer.Character and LocalPlayer.Character:WaitForChild("Humanoid")
-	if not hum then
+	local hrp = LocalPlayer.Character and LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+	local torso = LocalPlayer.Character and LocalPlayer.Character:WaitForChild("Torso")
+	if not hum or not hrp or not torso then
 		repeat task.wait() until LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 		local hum = LocalPlayer.Character and LocalPlayer.Character:WaitForChild("Humanoid")
 	end
@@ -563,7 +577,9 @@ local GunMods = {
 	["No-Spread"] = false,
 	["FireRate"] = 0.1,
 	["Bullet-Pen"] = 2,
-	["Instant-Aim"] = false
+	["Instant-Aim"] = false,
+	["Projectile-Speed"] = 10000,
+	["Explo-Radius"] = 100
 }
 
 for i,v in pairs(GunMods_Array) do
@@ -606,7 +622,7 @@ end, 1)
 
 local bx = Box(gmo0, "FireRate: .01", function(box)
 	local nuuum = tonumber(box.Text)
-	if nuuum and nuuum>= .0000001 then
+	if nuuum and nuuum>= .0000000000000001 then
 		GunMods.FireRate = nuuum
 	else
 		GunMods.FireRate = .01
@@ -615,14 +631,36 @@ local bx = Box(gmo0, "FireRate: .01", function(box)
     box.Text = ""
 end, 1)
 
-local bx = Box(gmo0, "Bullet-Pen: 2", function(box)
+local bx = Box(gmo0, "Projectile-Speed: 10000", function(box)
 	local nuuum = tonumber(box.Text)
 	if nuuum and nuuum>= 1 then
+		GunMods["Projectile-Speed"] = nuuum
+	else
+		GunMods["Projectile-Speed"] = 10000
+	end
+	box.PlaceholderText = "Projectile-Speed: " .. tostring(GunMods["Projectile-Speed"])
+    box.Text = ""
+end, 1)
+
+local bx = Box(gmo0, "Bullet-Pen: 2", function(box)
+	local nuuum = tonumber(box.Text)
+	if nuuum and nuuum>= 0 then
 		GunMods["Bullet-Pen"] = nuuum
 	else
 		GunMods["Bullet-Pen"] = 2
 	end
 	box.PlaceholderText = "Bullet-Pen: " .. tostring(GunMods["Bullet-Pen"])
+    box.Text = ""
+end, 1)
+
+local bx = Box(gmo0, "Explo-Radius: 100", function(box)
+	local nuuum = tonumber(box.Text)
+	if nuuum and nuuum>= 1 then
+		GunMods["Explo-Radius"] = nuuum
+	else
+		GunMods["Explo-Radius"] = 100
+	end
+	box.PlaceholderText = "Explo-Radius: " .. tostring(GunMods["Explo-Radius"])
     box.Text = ""
 end, 1)
 
@@ -668,6 +706,13 @@ task.spawn(function()
 				end
 				a.FireTime = GunMods.FireRate
 				a.BulletPenetration = GunMods["Bullet-Pen"]
+				a.OnSplashSelf = function() end
+				if a.Projectile and a.ProjectileSpeed then
+					a.ProjectileSpeed = GunMods["Projectile-Speed"]
+				end
+				if a.Splash and a.Splash.Radius then
+					a.Splash.Radius = GunMods["Explo-Radius"]
+				end
 			end
 		end
 	end
@@ -759,7 +804,7 @@ RunService.Stepped:Connect(function()
     local ss = GetClosestMouse(tbll)
     if ss then
         HitPart = ss:FindFirstChild(hbAim)
-		if bbbb and Main.Visible == false and not UIS:GetFocusedTextBox() and iswindowactive() and ashoot and HitPart and HitPart.Parent and HitPart.Parent:FindFirstChildOfClass("Humanoid") and HitPart.Parent.Humanoid.Health >= .1 and tonumber(LocalPlayer.PlayerGui.HUD.Ammo.Mag.Text) > 0 then
+		if bbbb and Main.Visible == false and not UIS:GetFocusedTextBox() and iswindowactive() and ashoot and HitPart and HitPart.Parent and HitPart.Parent:FindFirstChildOfClass("Humanoid") and HitPart.Parent.Humanoid.Health >= .1 and LocalPlayer.PlayerGui:FindFirstChild("HUD") and LocalPlayer.PlayerGui.HUD:FindFirstChild("Ammo") and LocalPlayer.PlayerGui.HUD.Ammo.Visible and tonumber(LocalPlayer.PlayerGui.HUD.Ammo.Mag.Text) > 0 then
 			if isPartVisible(HitPart) then
 				mouse1click()
 			end
