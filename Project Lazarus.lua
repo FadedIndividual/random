@@ -868,7 +868,7 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
                 return oldNamecall(unpack(Arguments))
             end
         end
-    elseif not checkcaller() and Method == "FireServer" and tostring(self) == "SendData" then
+    elseif not checkcaller() and Method == "FireServer" and (tostring(self) == "SendData" or tostring(self) == "UpdatePosition") then
         return nil
     end
     return oldNamecall(...)
