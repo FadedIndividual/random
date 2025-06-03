@@ -579,6 +579,7 @@ local GunMods = {
 	["Bullet-Pen"] = 2,
 	["Instant-Aim"] = false,
 	["Projectile-Speed"] = 10000,
+	["Proj-Gravity"] = false,
 	["Explo-Radius"] = 100
 }
 
@@ -640,6 +641,11 @@ local bx = Box(gmo0, "Projectile-Speed: 10000", function(box)
 	end
 	box.PlaceholderText = "Projectile-Speed: " .. tostring(GunMods["Projectile-Speed"])
     box.Text = ""
+end, 1)
+
+local bx = Button(gmo0, "Disable-Proj Grav: false", function(button)
+	GunMods["Proj-Gravity"] = not GunMods["Proj-Gravity"]
+	button.Text = "Disable-Proj Grav: " .. tostring(GunMods["Proj-Gravity"])
 end, 1)
 
 local bx = Box(gmo0, "Bullet-Pen: 2", function(box)
@@ -705,10 +711,16 @@ task.spawn(function()
 					a.AimTime = .01
 				end
 				a.FireTime = GunMods.FireRate
+				if a.PreFireDelay then
+					a.PreFireDelay = 0
+				end
 				a.BulletPenetration = GunMods["Bullet-Pen"]
 				a.OnSplashSelf = function() end
 				if a.Projectile and a.ProjectileSpeed then
 					a.ProjectileSpeed = GunMods["Projectile-Speed"]
+				end
+				if a.ProjectileGravity then
+					a.ProjectileGravity = not GunMods["Proj-Gravity"]
 				end
 				if a.Splash and a.Splash.Radius then
 					a.Splash.Radius = GunMods["Explo-Radius"]
