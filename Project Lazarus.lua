@@ -580,7 +580,8 @@ local GunMods = {
 	["Instant-Aim"] = false,
 	["Projectile-Speed"] = 10000,
 	["Proj-Gravity"] = false,
-	["Explo-Radius"] = 100
+	["Explo-Radius"] = 25,
+	["Full-Auto"] = false
 }
 
 for i,v in pairs(GunMods_Array) do
@@ -621,6 +622,11 @@ local iaBut = Button(gmo0, "Instant-Kill: false", function(button)
     button.Text = "Instant-Kill: " .. tostring(GunMods["Instant-Kill"])
 end, 1)
 
+local iaaaBut = Button(gmo0, "Full-Auto: false", function(button)
+    GunMods["Full-Auto"] = not GunMods["Full-Auto"]
+    button.Text = "Full-Auto: " .. tostring(GunMods["Full-Auto"])
+end, 1)
+
 local bx = Box(gmo0, "FireRate: .01", function(box)
 	local nuuum = tonumber(box.Text)
 	if nuuum and nuuum>= .0000000000000001 then
@@ -659,12 +665,12 @@ local bx = Box(gmo0, "Bullet-Pen: 2", function(box)
     box.Text = ""
 end, 1)
 
-local bx = Box(gmo0, "Explo-Radius: 100", function(box)
+local bx = Box(gmo0, "Explo-Radius: 25", function(box)
 	local nuuum = tonumber(box.Text)
 	if nuuum and nuuum>= 1 then
 		GunMods["Explo-Radius"] = nuuum
 	else
-		GunMods["Explo-Radius"] = 100
+		GunMods["Explo-Radius"] = 25
 	end
 	box.PlaceholderText = "Explo-Radius: " .. tostring(GunMods["Explo-Radius"])
     box.Text = ""
@@ -711,6 +717,9 @@ task.spawn(function()
 					a.AimTime = .01
 				end
 				a.FireTime = GunMods.FireRate
+				if a.Semi and GunMods["Full-Auto"] then
+					a.Semi = not GunMods["Full-Auto"]
+				end
 				if a.PreFireDelay then
 					a.PreFireDelay = 0
 				end
