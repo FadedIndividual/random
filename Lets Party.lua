@@ -262,6 +262,13 @@ setreadonly(Raw, true)
 local too = Create_Category("Tools")
 local loc = Create_Category("Local")
 
+local miButton1 = Button(too, "Goto Main Island", function(button)
+	local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+	if hrp then
+		hrp.CFrame = CFrame.new(-200.904175, 3.20000005, -100.358391)
+	end
+end, 1)
+
 local fTool = Button(too, "Grab Fling Tool", function(button)
     local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 	if hrp then
@@ -379,13 +386,6 @@ local noButton = Button(loc, "Noclip: false", function(button)
 	end
 end, 1)
 
-local miButton1 = Button(loc, "Goto Main Island", function(button)
-	local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-	if hrp then
-		hrp.CFrame = CFrame.new(-200.904175, 3.20000005, -100.358391)
-	end
-end, 1)
-
 local bind2, cache = Enum.KeyCode.R, {}
 local bd2 = Button(loc, {"ESP Mouse:", "R"}, function(button, text)
     isRecording = true
@@ -430,6 +430,49 @@ local bt4 = Button(loc, {"Delete ESP:", "X"}, function(button, text)
         isRecording = false
     end)
 end, 2)
+
+local FolddE = Instance.new("Folder")
+FolddE.Name = "Temp-Deleted"
+FolddE.Parent = Core
+
+local SHDParts = false
+local nosagfButton = Button(loc, "Ctrl-Click Delete (Temp): false", function(button)
+    SHDParts = not SHDParts
+	button.Text = "Ctrl-Click Delete (Temp): " .. tostring(SHDParts)
+end, 1)
+
+local pbpDelay = 10
+local bx = Box(loc, "Temp Part Time: 10", function(box)
+	pbpDelay = tonumber(box.Text) or 10
+    box.PlaceholderText = "Temp Part Time: " .. tostring(pbpDelay)
+    box.Text = ""
+end, 1)
+
+Mouse.Button1Down:Connect(function()
+	if SHDParts and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and not UIS:GetFocusedTextBox() then
+		local Part = Mouse.Target:IsA("BasePart") and Mouse.Target
+		if Part then
+			local Timee = tick()
+			local Saved = {["Transparency"] = Part.Transparency, ["CanCollide"] = Part.CanCollide}
+		
+			Part.Transparency = 1
+			Part.CanCollide = false
+			Part.CanQuery = false
+			Part.CanTouch = false
+			
+			task.spawn(function()
+				repeat task.wait() until tick()-Timee >= pbpDelay or not Part
+				pcall(function()
+					Part.Transparency = Saved.Transparency
+					Part.CanCollide = Saved.CanCollide
+					Part.CanQuery = false
+					Part.CanTouch = false
+				end)
+				Saved = nil
+			end)
+		end
+	end
+end)
 
 local bind = Enum.KeyCode.LeftAlt
 local bt2 = Button(loc, {"Close Menu:", "LeftAlt"}, function(button, text)
