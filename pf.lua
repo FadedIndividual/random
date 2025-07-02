@@ -397,7 +397,7 @@ task.spawn(function() while task.wait() do
         for i, v in pairs(_Folders) do
             if tostring(i) == tostring(LocalPlayer.Team) then
             else task.wait()
-                if #v >= 2 then
+                if #v > 0 then
                     for _,z in pairs(v) do
                         if not Cork:FindFirstChild("_"..z.Name) then
                             local High = Instance.new("Highlight")
@@ -409,7 +409,7 @@ task.spawn(function() while task.wait() do
         end
     end
 
-    if Cork and #Cork:GetChildren() >= 1 then
+    if Cork and #Cork:GetChildren() > 0 then
         if espEnabled == true then
             if (tick()-tk) <= 60 then
                 for i, v in pairs(Cork:GetChildren()) do task.wait()
