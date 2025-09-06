@@ -6,11 +6,12 @@ local Heartbeat = game:GetService("RunService").Heartbeat
 local RenderStepped = game:GetService('RunService').RenderStepped
 local mouse = game:GetService("Players").LocalPlayer:GetMouse()
 local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 
 
 function Tween(Object, Goal, Direction, Style, Time, WaitForTween)
     Style = Style or {}
-    local Tween = game:GetService("TweenService"):Create(Object,TweenInfo.new( Time, Style, Direction ), Goal)
+    local Tween = TweenService:Create(Object,TweenInfo.new( Time, Style, Direction ), Goal)
     Tween:Play()
     if WaitForTween then
         Tween.Completed:wait()
@@ -655,7 +656,7 @@ function library:CreateWindow(Name)
 				library.binding = true
 
 				KeybindButton.Text = '...'
-				local a, b = game:GetService('UserInputService').InputBegan:wait()
+				local a, b = UserInputService.InputBegan:wait()
 				local name = tostring(a.KeyCode.Name)
 				local typeName = tostring(a.UserInputType.Name)
 
@@ -824,7 +825,7 @@ function library:CreateWindow(Name)
 				end
 			end)
 
-			game:GetService("UserInputService").InputEnded:connect(function(input, processed)
+			UserInputService.InputEnded:connect(function(input, processed)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 then
 					held = false
 					ActiveSlider = nil
@@ -840,7 +841,7 @@ function library:CreateWindow(Name)
 
 			Heartbeat:connect(function()
 				if held and ActiveSlider == flagName then
-			        local mouse = game:GetService("UserInputService"):GetMouseLocation()
+			        local mouse = UserInputService:GetMouseLocation()
 					local percent = (mouse.X - slider.AbsolutePosition.X) / (slider.AbsoluteSize.X)
 					percent = math.clamp(percent, 0, 1)
 			        local Value = Options.Min + (Options.Max - Options.Min) * percent;
@@ -1504,7 +1505,7 @@ function library:CreateWindow(Name)
 
 			local location = Options.location or library.flags;
 			local flagName = Options.flag or "";
-			location[flagName] = { ['Colour'] = Options.Default or Color3.fromRGB(255,255,255); ['Opacity'] = Options.DefaultOpacity or 0 }
+			location[flagName] = { ['Color'] = Options.Default or Color3.fromRGB(255,255,255); ['Opacity'] = Options.DefaultOpacity or 0 }
 			
 			local Toggled = false
 			local DropTweeningStatus = false
@@ -1550,7 +1551,7 @@ function library:CreateWindow(Name)
 
 			function Tween(Object, Goal, Direction, Style, Time, WaitForTween)
 			    Style = Style or {}
-			    local Tween = game:GetService("TweenService"):Create(Object,TweenInfo.new( Time, Style, Direction ), Goal)
+			    local Tween = TweenService:Create(Object,TweenInfo.new( Time, Style, Direction ), Goal)
 			    Tween:Play()
 			    if WaitForTween then
 			        Tween.Completed:wait()
@@ -1611,7 +1612,7 @@ function library:CreateWindow(Name)
 			    	    else
 			    	        Red_Last = tostring(isnum)
 							ColorPickerBackground.ImageColor3 = Color3.fromRGB( isnum, tonumber(GreenBox.Text), tonumber(BlueBox.Text) )
-							location[flagName].Colour = Color3.fromRGB( isnum, tonumber(GreenBox.Text), tonumber(BlueBox.Text) )
+							location[flagName].Color = Color3.fromRGB( isnum, tonumber(GreenBox.Text), tonumber(BlueBox.Text) )
 							if callback then callback(not location[flagName]) end
 							ColorPickerName.TextColor3 = wcag.text(ColorPickerBackground.ImageColor3)
 			    	    end
@@ -1639,7 +1640,7 @@ function library:CreateWindow(Name)
 			    	    else
 			    	        Green_Last = tostring(isnum)
 							ColorPickerBackground.ImageColor3 = Color3.fromRGB( tonumber(RedBox.Text), isnum, tonumber(BlueBox.Text) )
-							location[flagName].Colour = Color3.fromRGB( tonumber(RedBox.Text), isnum, tonumber(BlueBox.Text) )
+							location[flagName].Color = Color3.fromRGB( tonumber(RedBox.Text), isnum, tonumber(BlueBox.Text) )
 							if callback then callback(not location[flagName]) end
 							ColorPickerName.TextColor3 = wcag.text(ColorPickerBackground.ImageColor3)
 			    	    end
@@ -1666,7 +1667,7 @@ function library:CreateWindow(Name)
 			    	    else
 			    	        Blue_Last = tostring(isnum)
 							ColorPickerBackground.ImageColor3 = Color3.fromRGB( tonumber(RedBox.Text), tonumber(GreenBox.Text), isnum )
-							location[flagName].Colour = Color3.fromRGB( tonumber(RedBox.Text), tonumber(GreenBox.Text), isnum )
+							location[flagName].Color = Color3.fromRGB( tonumber(RedBox.Text), tonumber(GreenBox.Text), isnum )
 							ColorPickerName.TextColor3 = wcag.text(ColorPickerBackground.ImageColor3)
 			    	    end
 			    	else
@@ -1692,7 +1693,7 @@ function library:CreateWindow(Name)
 						Hue, Saturation, Value = Color3.toHSV(Color3.fromRGB(R, G, B))
 						Color = Color3.fromHSV(Hue, Saturation, Value)
 						ColorPickerBackground.ImageColor3 = Color
-						location[flagName].Colour = Color
+						location[flagName].Color = Color
 						PickerItslef.ImageColor3 = Color3.fromHSV(Hue, 1, 1)
 						ColorPickerName.TextColor3 = wcag.text(ColorPickerBackground.ImageColor3)
 						HueMove(1 - Hue)
@@ -1723,7 +1724,7 @@ function library:CreateWindow(Name)
 				end
 			end)
 
-			game:GetService("UserInputService").InputEnded:connect(function(input, processed)
+			UserInputService.InputEnded:connect(function(input, processed)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 then
 					SVHeld = false
 				end
@@ -1732,7 +1733,7 @@ function library:CreateWindow(Name)
 				SVHeld = true
 			end)
 
-			game:GetService("UserInputService").InputEnded:connect(function(input, processed)
+			UserInputService.InputEnded:connect(function(input, processed)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 then
 					HueHeld = false
 				end
@@ -1747,7 +1748,7 @@ function library:CreateWindow(Name)
 				OpacitySliderBtn.Position = UDim2.new(Opacity, -5, 0, 5)
 			end
 
-			game:GetService("UserInputService").InputEnded:connect(function(input, processed)
+			UserInputService.InputEnded:connect(function(input, processed)
 				if input.UserInputType == Enum.UserInputType.MouseButton1 then
 					OpacityHeld = false
 				end
@@ -1758,62 +1759,64 @@ function library:CreateWindow(Name)
 
 			local Hue, Opacity, Saturation, Value, Red, Green, Blue, Hex
 			Heartbeat:connect(function()
-				RainbowButton.TextColor3 = GlobalRainbowColor
-				local Mouse = game:GetService("UserInputService"):GetMouseLocation()
-				if HueHeld then
-			        local HuePercent = (Mouse.X - HueSlider.AbsolutePosition.X) / (HueSlider.AbsoluteSize.X)
-				 	HuePercent = math.clamp(HuePercent, 0, 1)
-					Hue = 1 - HuePercent
-					HueMove(HuePercent)
-				end
-			
-				if OpacityHeld then
-					local OpacityPercent = (Mouse.X - OpacitySlider.AbsolutePosition.X) / (OpacitySlider.AbsoluteSize.X)
-					OpacityPercent = math.clamp(OpacityPercent, 0, 1)
-					Opacity = 1 - OpacityPercent
-					location[flagName].Opacity = Opacity
-					OpacityMove(OpacityPercent)
-				end
-			
-			 	if SVHeld then
-					local XPos = math.clamp((Mouse.X - PickerItslef.AbsolutePosition.X) / PickerItslef.AbsoluteSize.X, 0, 1)
-			       	local YPos = math.clamp((Mouse.Y - 36 - PickerItslef.AbsolutePosition.Y) / PickerItslef.AbsoluteSize.Y, 0, 1)
-					Saturation = math.clamp(XPos, 0, 1)
-					Value = math.clamp((1 - YPos), 0, 1)
-					MoveSatVal(XPos, 1 - YPos)
-				end
-			
-				if RainbowToggled then
-					PickerItslef.ImageColor3 = GlobalRainbowColor
-					ColorPickerBackground.ImageTransparency = Opacity
-					location[flagName].Opacity = Opacity
-					ColorPickerBackground.ImageColor3 = GlobalRainbowColor
-					location[flagName].Colour = GlobalRainbowColor
-				elseif HueHeld or OpacityHeld or SVHeld then
-					PickerItslef.ImageColor3 =  Color3.fromHSV(Hue, 1, 1)
-					ColorPickerBackground.ImageTransparency = Opacity
-					location[flagName].Opacity = Opacity
-					ColorPickerBackground.ImageColor3 = Color3.fromHSV(Hue, Saturation, Value)
-					location[flagName].Colour = Color3.fromHSV(Hue, Saturation, Value)
-				end
-
-				if RainbowToggled or HueHeld or OpacityHeld or SVHeld or HexChanged then
-					Red = 255 * ColorPickerBackground.ImageColor3.R
-					Green = 255 * ColorPickerBackground.ImageColor3.G
-					Blue = 255 * ColorPickerBackground.ImageColor3.B
-					Hex = string.upper((string.format("%06x", (Red % 256) * 65536 + (Green % 256) * 256 + Blue % 256)))
-					ColorPickerName.TextColor3 = wcag.text(ColorPickerBackground.ImageColor3)
-					if RainbowToggled or HueHeld or OpacityHeld or SVHeld or not HexChanged then
-						RedBox.Text = math.floor(Red)
-						GreenBox.Text = math.floor(Green)
-						BlueBox.Text = math.floor(Blue)
-						HexBox.Text = Hex
+				pcall(function()
+					RainbowButton.TextColor3 = GlobalRainbowColor
+					local Mouse = UserInputService:GetMouseLocation()
+					if HueHeld then
+						local HuePercent = (Mouse.X - HueSlider.AbsolutePosition.X) / (HueSlider.AbsoluteSize.X)
+						HuePercent = math.clamp(HuePercent, 0, 1)
+						Hue = 1 - HuePercent
+						HueMove(HuePercent)
 					end
-				end
+				
+					if OpacityHeld then
+						local OpacityPercent = (Mouse.X - OpacitySlider.AbsolutePosition.X) / (OpacitySlider.AbsoluteSize.X)
+						OpacityPercent = math.clamp(OpacityPercent, 0, 1)
+						Opacity = 1 - OpacityPercent
+						location[flagName].Opacity = Opacity
+						OpacityMove(OpacityPercent)
+					end
+				
+					if SVHeld then
+						local XPos = math.clamp((Mouse.X - PickerItslef.AbsolutePosition.X) / PickerItslef.AbsoluteSize.X, 0, 1)
+						local YPos = math.clamp((Mouse.Y - 36 - PickerItslef.AbsolutePosition.Y) / PickerItslef.AbsoluteSize.Y, 0, 1)
+						Saturation = math.clamp(XPos, 0, 1)
+						Value = math.clamp((1 - YPos), 0, 1)
+						MoveSatVal(XPos, 1 - YPos)
+					end
+				
+					if RainbowToggled then
+						PickerItslef.ImageColor3 = GlobalRainbowColor
+						ColorPickerBackground.ImageTransparency = Opacity
+						location[flagName].Opacity = Opacity
+						ColorPickerBackground.ImageColor3 = GlobalRainbowColor
+						location[flagName].Color = GlobalRainbowColor
+					elseif HueHeld or OpacityHeld or SVHeld then
+						PickerItslef.ImageColor3 =  Color3.fromHSV(Hue, 1, 1)
+						ColorPickerBackground.ImageTransparency = Opacity
+						location[flagName].Opacity = Opacity
+						ColorPickerBackground.ImageColor3 = Color3.fromHSV(Hue, Saturation, Value)
+						location[flagName].Color = Color3.fromHSV(Hue, Saturation, Value)
+					end
 
-				if OpacityHeld then
-					OpacityBox.Text = 1 - math.floor(Opacity* 100)/100
-				end
+					if RainbowToggled or HueHeld or OpacityHeld or SVHeld or HexChanged then
+						Red = 255 * ColorPickerBackground.ImageColor3.R
+						Green = 255 * ColorPickerBackground.ImageColor3.G
+						Blue = 255 * ColorPickerBackground.ImageColor3.B
+						Hex = string.upper((string.format("%06x", (Red % 256) * 65536 + (Green % 256) * 256 + Blue % 256)))
+						ColorPickerName.TextColor3 = wcag.text(ColorPickerBackground.ImageColor3)
+						if RainbowToggled or HueHeld or OpacityHeld or SVHeld or not HexChanged then
+							RedBox.Text = math.floor(Red)
+							GreenBox.Text = math.floor(Green)
+							BlueBox.Text = math.floor(Blue)
+							HexBox.Text = Hex
+						end
+					end
+
+					if OpacityHeld then
+						OpacityBox.Text = 1 - math.floor(Opacity* 100)/100
+					end
+				end)
 			end)
 		end
 		return Section
@@ -1837,7 +1840,9 @@ local function isreallypressed(bind, inp)
 	end
 end
 
-game:GetService("UserInputService").InputBegan:connect(function(input)
+UserInputService.InputBegan:connect(function(input, proc)
+	if proc then return end
+	
 	if not library.binding then
 		for idx, binds in next, library.binds do
 			local real_binding = binds.location[idx];
@@ -1846,7 +1851,7 @@ game:GetService("UserInputService").InputBegan:connect(function(input)
 			end
 		end
 	end
-end) 
+end)
 
 return library
 
@@ -1862,7 +1867,7 @@ Section:Button("Button", function()
 	print('KeYbInD -', library.flags.KeYbInD)
 	print('sliderino -', library.flags.Slideeeeee) 
 	print('Dropperino -', library.flags.Dropperino)
-	print('ColorPicker -', 'Color3.new(', library.flags.AMCOLOUR.Colour, ') Opacity =', library.flags.AMCOLOUR.Opacity )
+	print('ColorPicker -', 'Color3.new(', library.flags.AMColor.Color, ') Opacity =', library.flags.AMColor.Opacity )
 	print()
 	for i,v in pairs(library.flags.Dropperino) do
 		warn(i,v)
@@ -1875,5 +1880,5 @@ Section:Label('A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V,
 Section:Bind('am KEYbind', {flag = 'KeYbInD'}, function() print("AAAAAA") end)
 Section:Slider('am sliderino', {flag = "Slideeeeee"; Min = -100; Max = 100; Default = 0 ; Precise = false })
 Section:Dropdown('ima drop', {flag = 'Dropperino', list = Tableeeeeeee, Type = 'Toggle'})
-Section:ColorPicker('colour not color >:D', {flag = 'AMCOLOUR'})
+Section:ColorPicker('Color not color >:D', {flag = 'AMColor'})
 ]]
