@@ -51,7 +51,14 @@ function ScreenGUIName(length) -- 29 length is ideal
 end
 
 ---=== Main Part ===----
-local ScreenGUI = library:Create('ScreenGui', {Name = ScreenGUIName(29); Parent = game.CoreGui})
+local ScreenGUI = library:Create('ScreenGui', {Name = ScreenGUIName(29)})
+
+local gethui = protectgui or gethui or get_hidden_gui
+if gethui then
+    ScreenGUI.Parent = gethui()
+else
+    ScreenGUI.Parent = Core
+end
 
 function library:CreateWindow(Name)
 	self.Toggled = true
@@ -1843,6 +1850,10 @@ end
 UserInputService.InputBegan:connect(function(input, proc)
 	if proc then return end
 	
+	if input.KeyCode == Enum.KeyCode.RightShift then
+		ScreenGUI.Enabled = not ScreenGUI.Enabled
+	end
+	
 	if not library.binding then
 		for idx, binds in next, library.binds do
 			local real_binding = binds.location[idx];
@@ -1854,7 +1865,6 @@ UserInputService.InputBegan:connect(function(input, proc)
 end)
 
 return library
-
 --[[
 local Window = library:CreateWindow("I am a epic window")
 local Section = Window:Section("Am section")
