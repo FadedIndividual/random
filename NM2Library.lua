@@ -440,8 +440,8 @@ function library:CreateWindow(Name)
 			local location = Options.location or library.flags;
 			local flagName = Options.flag or "";
 			location[flagName] = Options.Default or flase
-
-			ToggleButtonOutline.MouseButton1Click:Connect(function()
+			
+			function togglePress()
 				if callback then callback(not location[flagName]) end
 				if location[flagName] then 
 					Tween(CirclePart, {Position = UDim2.new(0.017, 0, 0.05, 0)}, Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, 0.1, false)
@@ -456,7 +456,13 @@ function library:CreateWindow(Name)
 					check.ImageTransparency = 0
 					location[flagName] = true;
 				end
+			end
+
+			ToggleButtonOutline.MouseButton1Click:Connect(function()
+				togglePress()
 			end)
+			
+			return togglePress
 		end
 
 		function Section:Box(Name, Options, callback)
@@ -557,7 +563,7 @@ function library:CreateWindow(Name)
 					end
 					location[flagName] = Number
 				end
-				if callback then callback() end
+				if callback then callback(BoxValue) end
 			end)
 		end
 
@@ -866,6 +872,8 @@ function library:CreateWindow(Name)
 					if callback then callback(location[flagName]) end
 				end
 			end)
+			
+			return SetSliderValue
 		end
 
 		function Section:Dropdown(Name, Options, callback)
