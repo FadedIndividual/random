@@ -285,6 +285,8 @@ function library:CreateWindow(Name)
 			TextLabel.TextXAlignment = Enum.TextXAlignment.Left
 			TextLabel.Text = Name
 			TextLabel.BorderSizePixel = 0;
+			
+			return TextLabel
 		end
 
 		function Section:Button(Name, Function)
