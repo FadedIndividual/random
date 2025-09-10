@@ -331,7 +331,8 @@ function library:CreateWindow(Name)
 			
 			--Script part
 			Button.MouseButton1Click:connect(Function)
-
+			
+			return Button, Function
 		end
 
 		function Section:Toggle(Name, Options, callback)
@@ -567,6 +568,8 @@ function library:CreateWindow(Name)
 				end
 				if callback then callback(BoxValue) end
 			end)
+			
+			return callback
 		end
 
 		function Section:Bind(Name, Options, callback)
@@ -1142,8 +1145,7 @@ function library:CreateWindow(Name)
 
 			DropdownButton.MouseButton1Click:Connect(function()
 				ToggleDropdown()
-			end)	
-
+			end)
 		end
 
 		function Section:ColorPicker(Name, Options, callback)
