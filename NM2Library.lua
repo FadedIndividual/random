@@ -444,7 +444,7 @@ function library:CreateWindow(Name)
 			local flagName = Options.flag or "";
 			location[flagName] = Options.Default or false
 			
-			function togglePress()
+			local function togglePress()
 				if callback then callback(not location[flagName]) end
 				if location[flagName] then 
 					Tween(CirclePart, {Position = UDim2.new(0.017, 0, 0.05, 0)}, Enum.EasingDirection.InOut, Enum.EasingStyle.Linear, 0.1, false)
@@ -462,10 +462,8 @@ function library:CreateWindow(Name)
 			end
 
 			local TBClicked = ToggleButtonOutline.MouseButton1Click:Connect(function()
-				togglePress(ToggleButtonOutline)
+				togglePress()
 			end)
-			
-			return togglePress
 		end
 
 		function Section:Box(Name, Options, callback)
