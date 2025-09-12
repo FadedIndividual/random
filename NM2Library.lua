@@ -461,7 +461,7 @@ function library:CreateWindow(Name)
 				end
 			end
 
-			ToggleButtonOutline.MouseButton1Click:Connect(function()
+			local TBClicked = ToggleButtonOutline.MouseButton1Click:Connect(function()
 				togglePress(ToggleButtonOutline)
 			end)
 			
