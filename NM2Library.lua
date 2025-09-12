@@ -442,7 +442,7 @@ function library:CreateWindow(Name)
 
 			local location = Options.location or library.flags;
 			local flagName = Options.flag or "";
-			location[flagName] = Options.Default or flase
+			location[flagName] = Options.Default or false
 			
 			function togglePress()
 				if callback then callback(not location[flagName]) end
@@ -462,7 +462,7 @@ function library:CreateWindow(Name)
 			end
 
 			ToggleButtonOutline.MouseButton1Click:Connect(function()
-				togglePress()
+				togglePress(ToggleButtonOutline)
 			end)
 			
 			return togglePress
