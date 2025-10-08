@@ -1466,7 +1466,7 @@ do
             Content = string.format("Universe ID is %s", game.GameId)
         })
 
-        ConfigurationManager:AddButton({
+        --[[ConfigurationManager:AddButton({
             Title = "Import Configuration File",
             Description = "Loads the Game Configuration File",
             Callback = function()
@@ -1548,7 +1548,7 @@ do
                     })
                 end)
             end
-        })
+        })]]
 
         ConfigurationManager:AddButton({
             Title = "Export Configuration File",
@@ -2499,3 +2499,4 @@ local AimbotLoop; AimbotLoop = RunService[UISettings.RenderingMode]:Connect(func
     end
 
 end)
+
