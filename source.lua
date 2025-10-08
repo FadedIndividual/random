@@ -283,21 +283,21 @@ local ShowingESP = false
 
 do
     if typeof(script) == "Instance" and script:FindFirstChild("Fluent") and script:FindFirstChild("Fluent"):IsA("ModuleScript") then
-        Fluent = require(script:FindFirstChild("Fluent"))
+        --Fluent = require(script:FindFirstChild("Fluent"))
     else
         local Success, Result = pcall(function()
-            return game:HttpGet("https://twix.cyou/Fluent.txt", true)
+            --return game:HttpGet("https://twix.cyou/Fluent.txt", true)
         end)
         if Success and typeof(Result) == "string" and string.find(Result, "dawid") then
-            Fluent = getfenv().loadstring(Result)()
+            --Fluent = getfenv().loadstring(Result)()
             if Fluent.Premium then
-                return getfenv().loadstring(game:HttpGet("https://twix.cyou/Aimbot.txt", true))()
+                --return getfenv().loadstring(game:HttpGet("https://twix.cyou/Aimbot.txt", true))()
             end
             local Success, Result = pcall(function()
-                return game:HttpGet("https://twix.cyou/AimbotStatus.json", true)
+                --return game:HttpGet("https://twix.cyou/AimbotStatus.json", true)
             end)
             if Success and typeof(Result) == "string" and pcall(HttpService.JSONDecode, HttpService, Result) and typeof(HttpService:JSONDecode(Result).message) == "string" then
-                Status = HttpService:JSONDecode(Result).message
+                --Status = HttpService:JSONDecode(Result).message
             end
         else
             return
@@ -2394,10 +2394,10 @@ TrackingHandler:InitializePlayers()
 
 local OnTeleport; OnTeleport = Player.OnTeleport:Connect(function()
     if DEBUG or not Fluent or not getfenv().queue_on_teleport then
-        OnTeleport:Disconnect()
+        --OnTeleport:Disconnect()
     else
-        getfenv().queue_on_teleport("getfenv().loadstring(game:HttpGet(\"https://raw.githubusercontent.com/ttwizz/Open-Aimbot/master/source.lua\", true))()")
-        OnTeleport:Disconnect()
+        --getfenv().queue_on_teleport("getfenv().loadstring(game:HttpGet(\"https://raw.githubusercontent.com/ttwizz/Open-Aimbot/master/source.lua\", true))()")
+        --OnTeleport:Disconnect()
     end
 end)
 
@@ -2497,4 +2497,5 @@ local AimbotLoop; AimbotLoop = RunService[UISettings.RenderingMode]:Connect(func
             end
         end
     end
+
 end)
