@@ -430,13 +430,14 @@ AddCmd("copy", {"mimic"}, "Copy cat!", function(Player, args)
 		end
 	end
 end)
-
 local Spam_Tick = tick()
 local Spam_Num = 1
-AddCmd("spam", {"raid", "loopchat", "lchat", "lsay", "loopsay"}, "Spams Chat!", function(Player, args)
+AddCmd("spam", {"raid", "loopchat", "lchat", "lsay", "loopsay"}, "Spams Chat!", function(Player, args, Raw)
 	if ListCheck(Player) and not CheckMain(LocalPlayer) and BotCheck() then
 		if CheckString(args[1]) then
-			local String = table.concat(args, " ")
+			local String = string.split(Raw, " ")
+			table.remove(String, 1)
+			String = table.concat(String, " ")
 		
 			if string.find(String, ", ") then
 				String = String:split(", ")
