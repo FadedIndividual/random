@@ -1001,6 +1001,7 @@ function library:CreateWindow(Name)
 				return length
 			end
 
+			local TempTable = {}
 			local location = Options.location or library.flags;
 			local flagName = Options.flag or "";
 			local Dropdown_Type = Options.Type or 'Normal'
@@ -1104,16 +1105,16 @@ function library:CreateWindow(Name)
 								if Dropdown_Type == 'Toggle' then
 									if DroppedButton.TextColor3 == Color3.fromRGB(255,255,255) then
 										DroppedButton.TextColor3 = Color3.fromRGB(0,255,0)
+										table.insert(TempTable, v)
 									else
 										DroppedButton.TextColor3 = Color3.fromRGB(255,255,255)
-									end
-
-									local TempTable = {}
-									for i,v in pairs(DropMenu:GetChildren()) do
-										if v.Name == "Dropdown Button Background" and v["Dropdown Button"].TextColor3 == Color3.fromRGB(0,255,0) then
-											table.insert(TempTable, v["Dropdown Button"].Text)
+										for _,vv in ipairs(TempTable) do
+											if vv == v then
+												table.remove(TempTable, _)
+											end
 										end
 									end
+									
 									location[flagName] = TempTable
 								else
 									location[flagName] = v
