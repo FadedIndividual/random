@@ -93,7 +93,7 @@ local General = nil
 local function chat_Message(String: string)
 	local String = tostring(String)
 
-	if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+	if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService or game.PlaceId == 5913858916 then
 		if General == nil then
 			for i,v in pairs(TextChatService:GetChildren()) do
 				if v.Name == "TextChannels" and v:FindFirstChild("RBXGeneral") then
