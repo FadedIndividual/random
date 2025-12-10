@@ -1,25 +1,5 @@
 repeat task.wait() until game:IsLoaded()
-
-if game.PlaceId ~= 258258996 then
-	return
-end
-
---[[
-local args = {
-	1
-}
-game:GetService("ReplicatedStorage"):WaitForChild("QuickLoad"):InvokeServer(unpack(args))
--FIRST
-
-
-
-
--SECOND
-local args = {
-	1
-}
-game:GetService("ReplicatedStorage"):WaitForChild("LoadPlayerData"):InvokeServer(unpack(args))
-]]
+if game.PlaceId ~= 258258996 then return end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/FadedIndividual/random/refs/heads/main/NM2Library.lua"))()
 local Players = game:GetService("Players")
@@ -216,8 +196,6 @@ local function compareStrings(One, Two)
 			return
 		end
 		
-		--print("\nRebirth Price: " .. Two .. " - " .. RNum .. "\nCash: " .. One .. " - " .. CNum)
-		
 		if tonumber(CNum) > tonumber(RNum) then
 			Bool = true
 		elseif tonumber(Two) <= tonumber(One) and tonumber(CNum) == tonumber(RNum) then
@@ -264,17 +242,33 @@ selfSect:Toggle("Auto-Farm", {flag = "farm"}, function(bool)
 		shouldReload = false
 	end
 end)
-selfSect:Toggle("Auto-Mine Click", {flag = "miner"}, function() end)
+selfSect:Label("")
 selfSect:Label("Choose only 1 Layout!")
 selfSect:Dropdown("Layout Loader", {flag = "laynum", Default = "1", list = {"1", "2", "3"}}, function() end)
+selfSect:Slider("Delay Load Time", {flag = "DelayedFirst", Default = 1.5, Min = .5, Max = 10, Precise = true}, function() end)
+selfSect:Label("")
 selfSect:Label("If Load-Layout Costs $$$?")
 selfSect:Slider("Money", {flag = "layPrice", Min = 1, Max = 999, Default = 200}, function() end)
 selfSect:Dropdown("Suffix", {flag = "suffix", Default = "qd", list = MoneyLibrary.Suffixes}, function() end)
+selfSect:Slider("Delay Load Time #2", {flag = "DelayedSecond", Default = 2, Min = .5, Max = 10, Precise = true}, function() end)
 
 mapSect:Toggle("Grab-Crates", {flag = "crate"}, function() end)
+mapSect:Toggle("Auto-Mine Click", {flag = "miner"}, function() end)
+mapSect:Toggle("Show Ore-Values", {flag = "ores"}, function() end)
 
-client:Toggle("Show Ore-Values", {flag = "ores"}, function() end)
 client:Toggle("Auto-Open Crates", {flag = "openCrates"}, function() end)
+client:Button("Open Fusions", function()
+	local Map = workspace:FindFirstChild("Map")
+	local Prox;
+	
+	for i,v in pairs(Map:GetChildren()) do
+		if table.find({"WizardDude", "Cauldron"}, v.Name) and v:FindFirstChild("Internal") and v.Internal:FindFirstChild("ProximityPrompt") then
+			Prox = v.Internal.ProximityPrompt
+		end
+	end
+	
+	fireproximityprompt(Prox, 9e9)
+end)
 
 local shouldReload = false
 Notifs.ChildAdded:Connect(function(guiObject)
@@ -285,49 +279,66 @@ Notifs.ChildAdded:Connect(function(guiObject)
 	end
 end)
 
--- Auto - Rebirth --
-local Rebirthed, LoadSecond, delayPrice = false, false, "200qd"
+local Rebirthed, LoadSecond, delayPrice, Crates, Proxims, Time = false, false, "200qd", {}, {}, tick()
 task.spawn(function()
-	while task.wait() do
-		local CanRebirth = canRebirth()
+	local dropTick = tick()
+	while task.wait(.15) do
+		if tick()-Time >= 1.5 then
+			Time = tick()
+			Proxims = GetProximities()
+		end
+		
+		Crates = OpenableCrates()
+		CanRebirth = canRebirth()
 		delayPrice = tostring(library.flags.layPrice) .. tostring(library.flags.suffix)
 		
-		if CanRebirth and library.flags.farm then
+		if #Crates > 0 and library.flags.openCrates then
+			for i,v in pairs(Crates) do
+				game:GetService("ReplicatedStorage"):WaitForChild("MysteryBox"):InvokeServer(v)
+			end
+		end
+		
+		if library.flags.miner and tick()-dropTick >= .3 then
+			dropTick = tick()
+			task.spawn(function()
+				DropMines()
+				if #Proxims>0 then
+					for i,v in pairs(Proxims) do
+						fireproximityprompt(v, 9e9)
+					end
+				end
+			end)
+		end
+
+		if CanRebirth and Rebirthed == false and library.flags.farm then
 			Rebirth()
 			Rebirthed = true
-			task.wait(1.5)
-		else
-			task.wait(.5)
 		end
-	end
-end)
-
--- Auto - LoadLay --
-local Delay_Load = 2.5
-task.spawn(function()
-	while task.wait() do
+		
 		if Rebirthed and library.flags.farm then
 			Rebirthed = false
-			task.wait(Delay_Load)
-			LoadLayout(1)
-			LoadSecond = true
+			task.spawn(function()
+				task.wait(library.flags["DelayedFirst"])
+				LoadLayout(1)
+				LoadSecond = true
+			end)
 		elseif library.flags.farm and shouldReload and LoadSecond then
 			if not delayPrice or delayPrice == "" then
 				LoadSecond = false
 				return
 			end
 			
-			local Cash = GetCash()
-			local shouldRebirth = compareStrings(Cash, delayPrice)
+			Cash = GetCash()
+			shouldRebirth = compareStrings(Cash, delayPrice)
 			
 			if shouldRebirth then
 				LoadSecond = false
 				shouldReload = false
-				task.wait(Delay_Load)
-				LoadLayout(1)
+				task.spawn(function()
+					task.wait(library.flags["DelayedSecond"])
+					LoadLayout(1)
+				end)
 			end
-		else
-			task.wait(.5)
 		end
 	end
 end)
@@ -381,42 +392,6 @@ task.spawn(function()
 			end)
 		end
 	end)
-end)
-
--- Auto - Open - Chests --
-task.spawn(function()
-	while task.wait(.1) do
-		local Crates = OpenableCrates()
-		if #Crates > 0 and library.flags.openCrates then
-			for i,v in pairs(Crates) do
-				game:GetService("ReplicatedStorage"):WaitForChild("MysteryBox"):InvokeServer(v)
-			end
-		else
-			task.wait(.5)
-		end
-	end
-end)
-
--- Auto - Click - Mines --
-task.spawn(function()
-	local Proxims, Time = {}, tick()
-	while task.wait(.15) do
-		if tick()-Time >= 1.5 then
-			Time = tick()
-			Proxims = GetProximities()
-		end
-		
-		if library.flags.miner then
-			DropMines()
-			if #Proxims>0 then
-				for i,v in pairs(Proxims) do
-					fireproximityprompt(v, 9e9)
-				end
-			end
-		else
-			task.wait(.5)
-		end
-	end
 end)
 
 -- Auto - Grab - Crates --
