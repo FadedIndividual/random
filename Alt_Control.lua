@@ -48,6 +48,7 @@ config = {
 		["BFPS"] = 20;
 		["MFPS"] = 144;
 		["Annoy"] = false;
+		["NRender"] = {};
 	};
 }
 
@@ -93,7 +94,7 @@ local General = nil
 local function chat_Message(String: string)
 	local String = tostring(String)
 
-	if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService or game.PlaceId == 5913858916 then
+	if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
 		if General == nil then
 			for i,v in pairs(TextChatService:GetChildren()) do
 				if v.Name == "TextChannels" and v:FindFirstChild("RBXGeneral") then
@@ -389,6 +390,17 @@ AddCmd("say", {"chat", "text"}, "Bots say something!", function(Player, args, Ra
 				chat_Message(tostring(config["SelfIndex"]))
 			elseif table.find({"-w", "-wl", "-whitelist"}, args[1]) then
 				local Table = {}
+				--[[
+				for i,v in pairs(config["Settings"]["Whitelist"]) do
+					local Player;
+					pcall(function()
+						Player = Players:GetNameFromUserIdAsync(v)
+					end)
+					
+					if Player then
+						table.insert(Table, Player)
+					end
+				end]]
 				for i,v in pairs(Players:GetPlayers()) do
 					for ii,z in pairs(config["Settings"]["Whitelist"]) do
 						if v.UserId == z.UID then
@@ -430,6 +442,7 @@ AddCmd("copy", {"mimic"}, "Copy cat!", function(Player, args)
 		end
 	end
 end)
+
 local Spam_Tick = tick()
 local Spam_Num = 1
 AddCmd("spam", {"raid", "loopchat", "lchat", "lsay", "loopsay"}, "Spams Chat!", function(Player, args, Raw)
@@ -803,22 +816,25 @@ AddCmd("baseplate", {"ground"}, "Adds a Baseplate for the bots!", function(Playe
 end)
 
 AddCmd("norender", {"antilag", "boostfps", "morefps"}, "Renders Nothing on the map!", function(Player, args)
-	if ListCheck(Player) and not CheckMain(LocalPlayer) and config["SelfIndex"] ~= 0 then
+	if ListCheck(Player) and BotCheck() then
 		if CheckString(args[1]) and table.find({"t", "p", "+"}, args[1]:sub(1,1)) then
-			workspace.CurrentCamera.CameraSubject = nil
-			workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
-			workspace.CurrentCamera.CFrame = CFrame.new(Vector3.new(0, 5e9, 0))
+			if not table.find(config["Settings"]["NRender"], game.PlaceId) then
+				ChangeSetting(function(Settings)
+					Settings["NRender"][#Settings["NRender"]+1] = game.PlaceId
+				end)
+			end
 		else
-			workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
-			task.spawn(function()
-				local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-				if hum then
-					workspace.CurrentCamera.CameraSubject = hum
-				else
-					local T = tick()
-					repeat task.wait() until LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") or tick()-T>=6
-					
-					workspace.CurrentCamera.CameraSubject = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			ChangeSetting(function(Setting)
+				local t, Num = false, 0
+				for i,v in ipairs(Settings["NRender"]) do
+					if v == game.PlaceId then
+						t = true
+						Num = i
+					end
+				end
+				
+				if t then
+					table.remove(Settings["NRender"], Num)
 				end
 			end)
 		end
@@ -1248,6 +1264,26 @@ task.spawn(function()
 					else
 						User.CFrame = Pos * CFrame.Angles(0, math.rad(0), 0) * CFrame.new(0, 0, 5)
 					end
+				elseif Method == 28 then
+					if Main_Index == 1 then
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(65), 0) * CFrame.new(-4, 0, 4)
+					elseif Main_Index == 2 then
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(65), 0) * CFrame.new(1, 0, 4)
+					elseif Main_Index == 3 then
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(-55), 0) * CFrame.new(-1, 0, -6)
+					elseif Main_Index == 4 then
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(25), 0) * CFrame.new(4, 0, -5)
+					elseif Main_Index == 5 then
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(-65), 0) * CFrame.new(4, 0, 4)
+					elseif Main_Index == 6 then
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(-65), 0) * CFrame.new(-1, 0, 4)
+					elseif Main_Index == 7 then
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(55), 0) * CFrame.new(1, 0, -6)
+					elseif Main_Index == 8 then
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(-25), 0) * CFrame.new(-4, 0, -5)
+					else
+						User.CFrame = Pos * CFrame.Angles(0, math.rad(0), 0) * CFrame.new(0, 0, 7)
+					end
 				end
 				Remove_Velocity()
 			end
@@ -1267,6 +1303,22 @@ end)
 local ReloadTime, LTick, NTick, Sound, NewPlayer = tick(), tick(), tick(), tick(), tick()
 task.spawn(function() -- no errors please
 	while task.wait() do
+		if tick()-LTick>=2.5 then
+			LTick = tick()
+			local Loaded = File(true, "gameIDs.json")
+			if Loaded then
+				LTick = 0
+				task.spawn(function()
+					if tostring(game.JobId) ~= tostring(Loaded.JobId) or tonumber(game.PlaceId) ~= tonumber(Loaded.PlaceId) then
+						for i = 1,1e9 do
+							TeleportService:TeleportToPlaceInstance(Loaded.PlaceId, Loaded.JobId, LocalPlayer)
+							task.wait(1)
+						end
+					end
+				end)
+			end
+		end
+		
 		if tick()-NewPlayer>=8 and BotCheck() then
 			Bang = nil
 			NewPlayer = tick()
@@ -1346,10 +1398,17 @@ task.spawn(function() -- no errors please
 		end
 		
 		local Humanoid = LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+		local cam = workspace.CurrentCamera
 		if CheckMain(LocalPlayer) then
 			setfpscap(config["Settings"]["MFPS"])
 			--settings().Rendering.QualityLevel = 4
             --UserSettings().GameSettings.GraphicsQualityLevel = 17
+			if config["Settings"] and config["Settings"]["NRender"] and table.find(config["Settings"]["NRender"], game.PlaceId) then
+				cam.CameraType = Enum.CameraType.Custom
+				pcall(function()
+					cam.CameraSubject = Humanoid or nil
+				end)
+			end
 			RunService:Set3dRenderingEnabled(true)
 			if Humanoid then
 				Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
@@ -1359,6 +1418,11 @@ task.spawn(function() -- no errors please
 			RunService:Set3dRenderingEnabled(false)
 			settings().Rendering.QualityLevel = 1
             UserSettings().GameSettings.GraphicsQualityLevel = 1
+			if config["Settings"] and config["Settings"]["NRender"] and table.find(config["Settings"]["NRender"], game.PlaceId) then
+				cam.CameraSubject = nil
+				cam.CameraType = Enum.CameraType.Scriptable
+				cam.CFrame = CFrame.new(Vector3.new(0, 5e9, 0))
+			end
 			if Humanoid then
 				Humanoid:UnequipTools()
 				Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
