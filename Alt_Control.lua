@@ -12,6 +12,7 @@ local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 local Lighting = game:GetService("Lighting")
 local VoiceChatService = game:GetService("VoiceChatService")
+local iswa = iswindowactive or isrbxactive
 
 local config = {
 	["Folder"] = "Dwaynes_Bot/";
@@ -546,7 +547,7 @@ end)
 local Noclip_C;
 local function Noclip()
 	Noclip_C = RunService.Stepped:Connect(function()
-		if iswindowactive() then
+		if iswa() then
 			pcall(function()
 				Noclip_C:Disconnect()
 			end)
@@ -1376,7 +1377,7 @@ task.spawn(function() -- no errors please
 			
 			if Settings then
 				config["Settings"] = Settings
-				if iswindowactive() then
+				if iswa() then
 					if not CheckMain(LocalPlayer) then
 						ChangeSetting(function(Settings)
 							Settings["Main_Account"] = LocalPlayer.UserId
