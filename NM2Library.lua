@@ -820,7 +820,7 @@ function library:CreateWindow(Name)
 			local max = ( Options.Max < 0 and -Options.Max ) or Options.Max 
 			local diff = max + min
 
-			function SetSliderValue(number)
+			local function SetSliderValue(number)
 				if (not number) then return end
 					
 				local percent = 1 - ((Options.Max - number) / (Options.Max - Options.Min ))
