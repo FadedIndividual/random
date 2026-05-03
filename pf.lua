@@ -187,61 +187,29 @@ circle.Transparency = 0.4
 circle.Visible = false
 circle.Thickness = 1
 
-local function GetTeam(Part) 
-    for i,Vest in pairs(Part:GetDescendants()) do
-        if Vest.ClassName == "MeshPart" and Vest.MeshId == "rbxassetid://11232478007" and Vest.BrickColor == BrickColor.new("Earth blue") then
-            return game:GetService("Teams").Phantoms;
-        end
-    end
-
-    return game:GetService("Teams").Ghosts;
-end
-
-local function GetChars()
-    local Teams, num = {["Ghosts"] = {};["Phantoms"] = {}}, 0
-    
-    if workspace:FindFirstChild("Players") and #workspace.Players:GetChildren() >= 2 then
-        pcall(function()
-            for _,z in pairs(workspace.Players:GetChildren()) do
-                if tostring(GetTeam(z:GetChildren()[1])) == "Ghosts" then
-                    Teams.Ghosts = z:GetChildren()
-                else
-                    Teams.Phantoms = z:GetChildren()
-                end
-            end
-        end)
-    end
-
-    return Teams
-end
-function GetGUN()
-    local gun;
-
-    if #CC:GetChildren() >= 2 then
-        for _,z in pairs(CC:GetChildren()) do
-            if not z:FindFirstChild("Arms") and z:IsA("Model") then
-                gun = z
-            end
-        end
-    end
-
-    return gun
-end
 function _Heads()
-    local TBLL = {}
-    if _Folders then
-        for iii, zz in pairs(_Folders) do
-            if tostring(iii) ~= tostring(LocalPlayer.Team) then
-                for ii, vv in pairs(zz) do
-					for _, v in pairs(vv:GetDescendants()) do
-						if v:IsA("BasePart") and v:FindFirstChildOfClass("SpecialMesh") and v:FindFirstChildOfClass("SpecialMesh").MeshId == "rbxassetid://6179256256" then
-							table.insert(TBLL, v)
+	local TBLL = {}
+    local Players = workspace:FindFirstChild("Players")
+	
+	if Players then
+		for _,Team in pairs(Players:GetChildren()) do
+			for _,Player in pairs(Team:GetChildren()) do
+				local NameTagGui;
+				
+				for i,v in pairs(Player:GetChildren()) do
+					if v:FindFirstChild("NameTagGui") then
+						local Dot = v:FindFirstChild("NameTagGui") and v:FindFirstChild("NameTagGui"):FindFirstChild("PlayerTag") and v:FindFirstChild("NameTagGui"):FindFirstChild("PlayerTag"):FindFirstChild("Dot")
+						if Dot and Dot.BackgroundColor3 == Color3.fromRGB(255, 10, 20) then
+							pcall(function()
+								table.insert(TBLL, Dot.Parent.Parent.Parent)
+							end)
 						end
 					end
-                end
-            end
-        end
-    end
+				end
+			end
+		end
+	end
+	
     if #TBLL == 0 then return end
     return TBLL
 end
@@ -367,18 +335,15 @@ local aimCon = RunService.Stepped:Connect(function()
 	circle.Visible = fovVis
 	circle.Radius = _FOV
 	
-	_Folders = GetChars()
-    if _Folders then
-        pcall(function()
-            if not _Locked or _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) or not UIS:IsMouseButtonPressed(1) then
-			    _Locked = GetClosestMouse(_Heads())
-            end
-		end)
-    end
+	pcall(function()
+		if not _Locked or _Locked == nil or not (_Locked~=nil) or not pcall(function() _Locked.Transparency = _Locked.Transparency end) or not UIS:IsMouseButtonPressed(0) or not UIS:IsMouseButtonPressed(1) then
+			_Locked = GetClosestMouse(_Heads())
+		end
+	end)
 	
 	if _Locked and UIS:IsMouseButtonPressed(1) and aimEnabled then
         pcall(function()
-            local vec, _fp = nil, CC:FindFirstChildOfClass("Part")
+            local vec, _fp = nil, Camera:FindFirstChildOfClass("Part")
             local _Dist = (_fp.Position - _Locked.Position).Magnitude
             if _Dist >= 100 then
                 vec = PositionToScreen((UIS:IsMouseButtonPressed(0) and (_Locked.Position + Vector3.new(0, .45*_Dist/100, 0)) or (_Locked.Position + Vector3.new(0, (.35*_Dist/100), 0))))
@@ -390,45 +355,23 @@ local aimCon = RunService.Stepped:Connect(function()
     end
 end)
 
-local tk = tick()
-task.spawn(function() while task.wait() do
-    _Folders = GetChars()
-    if _Folders and espEnabled then
-        for i, v in pairs(_Folders) do
-            if tostring(i) == tostring(LocalPlayer.Team) then
-            else task.wait()
-                if #v > 0 then
-                    for _,z in pairs(v) do
-                        if not Cork:FindFirstChild("_"..z.Name) then
-                            local High = Instance.new("Highlight")
-                            High.Parent = Cork; High.Name = "_"..z.Name; High.Adornee = z; High.OutlineColor = Color3.fromRGB(255, 0, 0) High.OutlineTransparency = .25; High.FillTransparency = 1; High.Enabled = true; High.LineThickness = 3; High.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-                        end
-                    end
-                end
-            end
-        end
-    end
-
-    if Cork and #Cork:GetChildren() > 0 then
-        if espEnabled == true then
-            if (tick()-tk) <= 60 then
-                for i, v in pairs(Cork:GetChildren()) do task.wait()
-                    if v.Adornee then
-                        v.OutlineColor = Color3.fromRGB(255, 0, 0)
-                    else
-                        v:Destroy()
-                    end
-                end
-            else
-                tk = tick()
-                for i, v in pairs(Cork:GetChildren()) do
-                    v:Destroy()
-                end
-            end
-        else
-            for i, v in pairs(Cork:GetChildren()) do
-                v:Destroy()
-            end
-        end
-    end
-end end)
+task.spawn(function()
+	while task.wait() do
+		local Heads = _Heads()
+		
+		if Heads then
+			for i,v in pairs(Heads) do
+				pcall(function()
+					local high = v.Parent:FindFirstChild("high")
+					
+					if not high then
+						high = Instance.new("Highlight")
+						high.Name = "high"; high.OutlineColor = Color3.fromRGB(255, 0, 0) high.OutlineTransparency = .25; high.FillTransparency = 1; high.LineThickness = 3; high.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop; high.Parent = v.Parent;
+					end
+					
+					high.Enabled = espEnabled
+				end)
+			end
+		end
+	end
+end)
