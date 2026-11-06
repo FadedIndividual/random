@@ -372,7 +372,7 @@ resume(create(function()
                 -- using PrimaryPart instead because if your Target Part is "Random" it will flicker the square between the Target's Head and HumanoidRootPart (its annoying)
                 
                 mouse_box.Visible = IsOnScreen
-                mouse_box.Position = Vector2.new(RootToViewportPoint.X, RootToViewportPoint.Y)
+                mouse_box.Position = Vector2.new(RootToViewportPoint.X - mouse_box.Size.X/2, RootToViewportPoint.Y - mouse_box.Size.Y/2)
             else 
                 mouse_box.Visible = false 
                 mouse_box.Position = Vector2.new()
